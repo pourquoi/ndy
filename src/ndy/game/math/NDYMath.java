@@ -1,0 +1,24 @@
+package ndy.game.math;
+
+public class NDYMath {
+	public static float PIOVER180 = 0.0174532925f;
+	
+	public static float abs(float v) {
+		if( v < 0f ) return -v;
+		return v;
+	}
+	
+	public static float max(float a, float b) {
+		if( a > b ) return a;
+		return b;
+	}
+	
+	public static float min(float a, float b) {
+		if( a < b ) return a;
+		return b;
+	}
+	
+	public static float sign(float a) {
+		return a < 0f ? -1f : 1f;
+	}
+}
