@@ -30,13 +30,6 @@ public class NDYComponentMesh extends NDYComponent {
 	protected float [] mMatrix = new float[16];
 	protected float [] mTranslationMatrix = new float[16];
 	
-	public NDYComponentMesh(NDYMesh mesh, NDYMaterial material, NDYProgram program) {
-		super("mesh");
-		mMesh = mesh;
-		mMaterial = material;
-		mProgram = program;
-	}
-	
 	public NDYComponentMesh(String meshName, String programName, String textureName) {
 		super("mesh");
 		NDYMesh mesh = (NDYMesh)NDYRessource.getRessource(meshName);
@@ -50,6 +43,7 @@ public class NDYComponentMesh extends NDYComponent {
 			program = new NDYProgramBasic(programName);
 			NDYRessource.addRessource(program);
 		}
+		
 		NDYMaterial material = new NDYMaterial();
 		if( textureName != null ) {
 			NDYTexture texture = (NDYTexture)NDYRessource.getRessource(textureName);
@@ -69,6 +63,7 @@ public class NDYComponentMesh extends NDYComponent {
 		NDYTransformable r = (NDYTransformable)mParent;
 		
 		Vector3 pos = r.getPos();
+		Vector3 scale = r.getScale();
 		Quaternion q = r.getRotQ();
 
 		NDYAnimation anim = mMesh.animations.get(submesh.animation);
@@ -81,6 +76,7 @@ public class NDYComponentMesh extends NDYComponent {
 		Matrix.translateM(mTranslationMatrix, 0, pos.x, pos.y, pos.z);
 					
 		Matrix.multiplyMM(mMatrix, 0, mTranslationMatrix, 0, q.getMatrix(), 0);
+		Matrix.scaleM(mMatrix, 0, scale.x, scale.y, scale.z);
 	}
 	
 	@Override
@@ -93,9 +89,11 @@ public class NDYComponentMesh extends NDYComponent {
 				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mMaterial.texture.getId());
 			}
 			
+			/*
 			GLES20.glEnable(GLES20.GL_BLEND);
 			GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-
+			*/
+			
 	        GLES20.glUseProgram(mProgram.getId());
 	        NDYGLSurfaceView.checkGLError("glUseProgram");
 	        
@@ -103,22 +101,7 @@ public class NDYComponentMesh extends NDYComponent {
 	        
 	        NDYWorld w = NDYWorld.current;
 	        
-	        GLES20.glUniform1f(p.mTimeHandle, w.getTime());
-	        NDYGLSurfaceView.checkGLError("glUniform1i time");
-	        
-	        NDYCamera c = w.getCamera();
-	        
-	        GLES20.glUniformMatrix4fv(p.mViewMatrixHandle, 1, false, c.getViewMatrix(), 0);
-	        NDYGLSurfaceView.checkGLError("glUniformMatrix4fv view matrix");
-
-	        GLES20.glUniformMatrix4fv(p.mProjectionHandle, 1, false, c.getProjectionMatrix(), 0);
-	        NDYGLSurfaceView.checkGLError("glUniformMatrix4fv projection matrix");
-	        
-	        GLES20.glUniform3f(p.mEyePosHandle, c.getPos().x, c.getPos().y, c.getPos().z);
-	        NDYGLSurfaceView.checkGLError("glUniform3f eyepos");
-
-	        GLES20.glUniform3fv(p.mLightDirHandle, 1, w.getLightDir(), 0);
-	        NDYGLSurfaceView.checkGLError("glUniform3f lightdir");
+	        p.setWorldAttribs();
 	        
 	        Iterator<Entry<String, NDYSubMesh>> it = mMesh.submeshes.entrySet().iterator();
 	        while(it.hasNext()) {
@@ -139,31 +122,52 @@ public class NDYComponentMesh extends NDYComponent {
 		        NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray maPositionHandle");
 		        
 		        if( submesh.getDesc() == NDYSubMesh.VERTEX_DESC_POSITION_TEXCOORDS || submesh.getDesc() == NDYSubMesh.VERTEX_DESC_POSITION_NORMAL_TEXCOORDS ) {
-		        	submesh.vbuffer.position(submesh.texcoordsOffset);
-		        	GLES20.glVertexAttribPointer(p.mTextureHandle, 2, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
-		        	NDYGLSurfaceView.checkGLError("glVertexAttribPointer maTextureHandle");
-		        	GLES20.glEnableVertexAttribArray(p.mTextureHandle);
-		        	NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray maTextureHandle");
+		        	if( p.mTextureHandle != -1 ) {
+		        		submesh.vbuffer.position(submesh.texcoordsOffset);
+			        	GLES20.glVertexAttribPointer(p.mTextureHandle, 2, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
+			        	NDYGLSurfaceView.checkGLError("glVertexAttribPointer maTextureHandle");
+			        	GLES20.glEnableVertexAttribArray(p.mTextureHandle);
+			        	NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray maTextureHandle");
+		        	}
 		        }
 		        
 		        if( submesh.getDesc() == NDYSubMesh.VERTEX_DESC_POSITION_NORMAL || submesh.getDesc() == NDYSubMesh.VERTEX_DESC_POSITION_NORMAL_TEXCOORDS ) {
-			        submesh.vbuffer.position(submesh.normalOffset);
-			        GLES20.glVertexAttribPointer(p.mNormalHandle, 3, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
-			        GLES20.glEnableVertexAttribArray(p.mNormalHandle);
-			        NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray mNormalHandle");
+		        	if( p.mNormalHandle != -1 ) {
+				        submesh.vbuffer.position(submesh.normalOffset);
+				        GLES20.glVertexAttribPointer(p.mNormalHandle, 3, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
+				        GLES20.glEnableVertexAttribArray(p.mNormalHandle);
+				        NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray mNormalHandle");
+		        	}
 		        }
 		        
-		        GLES20.glUniform4fv(p.mAmbientHandle, 1, material.ambient, 0);
-		        NDYGLSurfaceView.checkGLError("glUniform4fv ambient");
+		        if( submesh.getDesc() == NDYSubMesh.VERTEX_DESC_POSITION_COLOR ) {
+		        	if( p.mColorHandle != -1 ) {
+		        		submesh.vbuffer.position(submesh.colorOffset);
+		        		GLES20.glVertexAttribPointer(p.mColorHandle, 4, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
+				        GLES20.glEnableVertexAttribArray(p.mColorHandle);
+				        NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray mColorHandle");
+		        	}
+		        }
 		        
-		        GLES20.glUniform4fv(p.mDiffuseHandle, 1, material.diffuse, 0);
-		        NDYGLSurfaceView.checkGLError("glUniform4fv diffuse");
+		        if( p.mAmbientHandle != -1 ) {
+			        GLES20.glUniform4fv(p.mAmbientHandle, 1, material.ambient, 0);
+			        NDYGLSurfaceView.checkGLError("glUniform4fv ambient");
+		        }
 		        
-		        GLES20.glUniform4fv(p.mSpecularHandle, 1, material.specular, 0);
-		        NDYGLSurfaceView.checkGLError("glUniform4fv specular");
+		        if( p.mDiffuseHandle != -1 ) {
+			        GLES20.glUniform4fv(p.mDiffuseHandle, 1, material.diffuse, 0);
+			        NDYGLSurfaceView.checkGLError("glUniform4fv diffuse");
+		        }
 		        
-		        GLES20.glUniform1f(p.mShininessHandle, material.shininess);
-		        NDYGLSurfaceView.checkGLError("glUniform1f shininess");
+		        if( p.mSpecularHandle != -1 ) {
+			        GLES20.glUniform4fv(p.mSpecularHandle, 1, material.specular, 0);
+			        NDYGLSurfaceView.checkGLError("glUniform4fv specular");
+		        }
+		        
+		        if( p.mShininessHandle != -1 ) {
+		        	GLES20.glUniform1f(p.mShininessHandle, material.shininess);
+		        	NDYGLSurfaceView.checkGLError("glUniform1f shininess");
+		        }
 		        
 		        if( submesh.ibuffer != null ) {
 		        	GLES20.glDrawElements(submesh.drawMode, submesh.ibuffer.capacity(), GLES20.GL_UNSIGNED_SHORT, submesh.ibuffer);

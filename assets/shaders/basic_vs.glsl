@@ -9,9 +9,7 @@ uniform vec4 uSpecular;
 uniform float uShininess;
 uniform float uTime;
 attribute vec3 aPosition;
-attribute vec2 aTextureCoord;
 attribute vec3 aNormal;
-varying vec2 vTextureCoord;
 varying vec4 vColor;
 varying vec3 vPos;
 void main() {
@@ -25,6 +23,5 @@ void main() {
   vec3 D = normalize(uEyePos - vPos);
   vColor = uAmbient + dot(N,L) * uDiffuse + pow(clamp(dot(R,D),0.0,1.0),uShininess) * uSpecular;
   vColor.a = 1.0;
-  vTextureCoord = aTextureCoord;
   gl_Position = wvp * vec4(dpos,1.0);
 }

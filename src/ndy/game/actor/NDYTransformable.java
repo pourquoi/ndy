@@ -11,6 +11,7 @@ public class NDYTransformable extends NDYActor {
 
 	protected Vector3 mPos = new Vector3();
 	protected Vector3 mRot = new Vector3();
+	protected Vector3 mScale = new Vector3(1,1,1);
 	
 	protected Quaternion mRotQ = new Quaternion();
 
@@ -46,6 +47,16 @@ public class NDYTransformable extends NDYActor {
 		mRot.x = x;
 		mRot.y = y;
 		mRot.z = z;
+	}
+	
+	public Vector3 getScale() {
+		return mScale;
+	}
+	
+	public void setScale(float x, float y, float z) {
+		mScale.x = x;
+		mScale.y = y;
+		mScale.z = z;
 	}
 	
 	public Quaternion getRotQ() {

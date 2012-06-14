@@ -1,7 +1,8 @@
 package ndy.game.math;
 
 public class NDYMath {
-	public static float PIOVER180 = 0.0174532925f;
+	public static float TO_RADIANS = 0.0174532925f;
+	public static float TO_DEGREES = 57.2957795f;
 	
 	public static float abs(float v) {
 		if( v < 0f ) return -v;

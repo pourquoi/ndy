@@ -12,9 +12,11 @@ public class NDYSubMesh {
 	private static String TAG = "SubMesh";
 	
 	public static int VERTEX_DESC_POSITION = 1;
-	public static int VERTEX_DESC_POSITION_NORMAL = 2;
-	public static int VERTEX_DESC_POSITION_TEXCOORDS = 3;
-	public static int VERTEX_DESC_POSITION_NORMAL_TEXCOORDS = 4;
+	public static int VERTEX_DESC_POSITION_COLOR = 2;
+	public static int VERTEX_DESC_POSITION_NORMAL = 3;
+	public static int VERTEX_DESC_POSITION_TEXCOORDS = 4;
+	public static int VERTEX_DESC_POSITION_NORMAL_TEXCOORDS = 5;
+	
 	
 	public FloatBuffer vbuffer = null;
 	public ShortBuffer ibuffer = null;
@@ -22,6 +24,7 @@ public class NDYSubMesh {
 	public int vsize;
 	public int posOffset = 0;
 	public int normalOffset = 3;
+	public int colorOffset = 3;
 	public int texcoordsOffset;
 		
 	public NDYMaterial material;
@@ -39,6 +42,8 @@ public class NDYSubMesh {
 		mDesc = desc;
 		if( desc == VERTEX_DESC_POSITION ) {
 			vsize = 3 * NDYMesh.FLOAT_SIZE_BYTES;
+		} else if( desc == VERTEX_DESC_POSITION_COLOR ) {
+			vsize = 7 * NDYMesh.FLOAT_SIZE_BYTES;
 		} else if( desc == VERTEX_DESC_POSITION_NORMAL ) {
 			vsize = 6 * NDYMesh.FLOAT_SIZE_BYTES;
 		} else if( desc == VERTEX_DESC_POSITION_TEXCOORDS ) {

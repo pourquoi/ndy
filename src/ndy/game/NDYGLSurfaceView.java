@@ -1,8 +1,5 @@
 package ndy.game;
 
-import ndy.game.actor.NDYTransformable;
-import ndy.game.component.NDYComponentMeshSailboat;
-import ndy.game.math.Vector3;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -13,7 +10,7 @@ import android.view.MotionEvent;
 public class NDYGLSurfaceView extends GLSurfaceView {
 	private static String TAG = "NDYGLSurfaceView";
 	private float lastTouchX, lastTouchY;
-	private NDYUI mUI = new NDYUI();
+	private NDYInput mInput = new NDYInput();
 
 	public NDYGLSurfaceView(Context context) {
 		super(context);
@@ -45,18 +42,15 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
 					Log.d(TAG, "up ("+lastTouchX+","+lastTouchY+")");
-					mUI.setFocus(NDYUI.FOCUS_NONE);
+
+					mInput.up(lastTouchX, lastTouchY);
 					break;
 				case MotionEvent.ACTION_DOWN:
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
 					Log.d(TAG, "down ("+lastTouchX+","+lastTouchY+")");
 					
-					if( lastTouchY > height - height/8 ) {
-						mUI.setFocus(NDYUI.FOCUS_RUDDER);
-					} else {
-						mUI.setFocus(NDYUI.FOCUS_MAINSAIL);
-					}
+					mInput.down(lastTouchX, lastTouchY);
 					break;
 				case MotionEvent.ACTION_MOVE:
 					float dx = event.getX() - lastTouchX;
@@ -64,18 +58,8 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
 					Log.d(TAG, "move ("+dx+","+dy+")");
-					NDYTransformable r = NDYWorld.current.getRacer();
-					if( mUI.getFocus() == NDYUI.FOCUS_MAINSAIL ) {
-						NDYComponentMeshSailboat b = (NDYComponentMeshSailboat)r.findComponent("mesh");
-						if( b != null ) {
-							b.setMainSailRot(b.getMainSailRot()+dx);
-						}
-					} else if( mUI.getFocus() == NDYUI.FOCUS_RUDDER ) {
-						Vector3 rot = r.getRot();
-						rot.y += dx;
-					}
-					
-					NDYWorld.current.getCamera().getPos().y += dy;
+
+					mInput.move(dx, dy);
 					break;
 				default:
 				}

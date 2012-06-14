@@ -23,9 +23,11 @@ public class Vector3 {
 	
 	public Vector3 normalize() {
 		float d = FloatMath.sqrt(x*x + y*y + z*z);
+		if(d!=0.f) {
 		x /= d;
 		y /= d;
 		z /= d;
+		}
 		
 		return this;
 	}
@@ -63,12 +65,12 @@ public class Vector3 {
 		return this;
 	}
 	
-	public static Vector3 dotProduct(Vector3 a, Vector3 b) {
-		Vector3 v = new Vector3();
-		v.x = a.x * b.x;
-		v.y = a.y * b.y;
-		v.z = a.z * b.z;
-		return v;
+	public static float det(Vector3 a, Vector3 b) {
+		return a.x*b.z - a.z*b.x;
+	}
+	
+	public static float dotProduct(Vector3 a, Vector3 b) {
+		return a.x*b.x+a.y*b.y+a.z*b.z;
 	}
 	
 	public static Vector3 crossProduct(Vector3 a, Vector3 b) {

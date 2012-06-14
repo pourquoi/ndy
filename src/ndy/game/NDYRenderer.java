@@ -6,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.SystemClock;
+import android.util.Log;
 
 public class NDYRenderer implements GLSurfaceView.Renderer {
 	private long mAccumulator = 0;
@@ -18,6 +19,7 @@ public class NDYRenderer implements GLSurfaceView.Renderer {
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+		Log.d("NDYRenderer", "surface created");
 		//GLES20.glDisable(GLES20.GL_CULL_FACE);
 		
 //		GLES20.glEnable(GLES20.GL_CULL_FACE);
@@ -38,6 +40,7 @@ public class NDYRenderer implements GLSurfaceView.Renderer {
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
 		GLES20.glViewport(0, 0, w, h);
 		NDYWorld.current.getCamera().resize(w, h);
+		NDYWorld.current.getCameraOrtho().resize(w, h);
 	}
 	
 	@Override
@@ -57,7 +60,7 @@ public class NDYRenderer implements GLSurfaceView.Renderer {
 			mAccumulator -= mTimeStep;
 		}
 		
-		GLES20.glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+		GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         GLES20.glClear( GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
         NDYWorld.current.render();

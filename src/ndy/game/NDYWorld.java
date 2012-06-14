@@ -9,21 +9,25 @@ import ndy.game.component.NDYComponentCinematicSailboat;
 import ndy.game.component.NDYComponentFollow;
 import ndy.game.component.NDYComponentMesh;
 import ndy.game.component.NDYComponentMeshSailboat;
+import ndy.game.math.NDYMath;
 import ndy.game.math.Vector3;
+import ndy.game.mesh.NDYMesh;
 import ndy.game.message.NDYMessageRender;
 import ndy.game.message.NDYMessageUpdate;
-
 import android.content.Context;
 
 
 public class NDYWorld {
+	private NDYUI mUI;
 	private ArrayList<NDYActor> mActors;
 	private NDYCamera mCamera;
+	private NDYCamera mCameraPerspective;
+	private NDYCamera mCameraOrtho;
 	private NDYTransformable mRacer;
 	private Context mContext;
+	private long mTime = 0;
 	protected float [] mLightDir = new float[3];
 	protected Vector3 mWindDir = new Vector3();
-	private long mTime = 0;
 	
 	public static NDYWorld current;
 			
@@ -49,11 +53,20 @@ public class NDYWorld {
 		
 		mActors = new ArrayList<NDYActor>();
 		
+		// create the ui
+		mUI = new NDYUI();
+		mActors.add(mUI);
+		
 		// create the camera
-		mCamera = new NDYCamera();
-		mCamera.setTarget(0f, 0f, 10.f);
-		mCamera.setPos(0f, 10f, -10f);
-		mActors.add(mCamera);
+		mCameraPerspective = new NDYCamera();
+		mCameraPerspective.setTarget(0f, 0f, 10.f);
+		mCameraPerspective.setPos(0f, 10f, -10f);
+		mActors.add(mCameraPerspective);
+		mCamera = mCameraPerspective;
+		
+		mCameraOrtho = new NDYCamera();
+		mCameraOrtho.setMode(NDYCamera.MODE_ORTHO);
+		mActors.add(mCameraOrtho);
 		
 		// create the racer
 		mRacer = new NDYTransformable();
@@ -70,15 +83,23 @@ public class NDYWorld {
 		mCamera.addComponent(followComponent);
 		
 		NDYTransformable plan = new NDYTransformable();
-		meshComponent = new NDYComponentMesh("models/plan.3ds", "shaders/basic_textured", "textures/cube.png");
+		meshComponent = new NDYComponentMesh("models/plan.3ds", "shaders/basic_textured", "textures/sand_2.jpg");
 		plan.addComponent(meshComponent);
 		mActors.add(plan);
+
+		NDYTransformable axis3D = new NDYTransformable();
+		axis3D.setScale(1000,1000,1000);
+		NDYMesh mesh = NDYMesh.axis3d();
+		NDYRessource.addRessource(mesh);
+		meshComponent = new NDYComponentMesh(mesh.toString(),"shaders/axis",null);
+		axis3D.addComponent(meshComponent);
+		mActors.add(axis3D);
 		
 		NDYTransformable arrow = new NDYTransformable();
 		meshComponent = new NDYComponentMesh("models/arrow.3ds", "shaders/basic", null);
 		arrow.addComponent(meshComponent);
 		mActors.add(arrow);
-		arrow.setRot(mWindDir.x, mWindDir.y, mWindDir.z);
+		arrow.setRot(0, (float)Math.acos(mWindDir.x)*NDYMath.TO_DEGREES+180, 0);
 	}
 	
 	public void update(long dt) {
@@ -97,12 +118,24 @@ public class NDYWorld {
 		}
 	}
 	
+	public void addActor(NDYActor a) {
+		mActors.add(a);
+	}
+	
 	public NDYCamera getCamera() {
 		return mCamera;
 	}
 	
 	public void setCamera(NDYCamera camera) {
 		mCamera = camera;
+	}
+	
+	public NDYCamera getCameraPerspective() {
+		return mCameraPerspective;
+	}
+	
+	public NDYCamera getCameraOrtho() {
+		return mCameraOrtho;
 	}
 	
 	public NDYTransformable getRacer() {
@@ -131,5 +164,9 @@ public class NDYWorld {
 	
 	public Vector3 getWindDir() {
 		return mWindDir;
+	}
+	
+	public NDYUI getUI() {
+		return mUI;
 	}
 }

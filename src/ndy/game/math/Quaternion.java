@@ -52,7 +52,7 @@ public class Quaternion {
 	
 	public void fromAxis(Vector3 v, float a) {
 		float sinAngle;
-		a = a * NDYMath.PIOVER180 * 0.5f;
+		a = a * NDYMath.TO_RADIANS * 0.5f;
 		Vector3 vn = new Vector3(v);
 		vn.normalize();
 		sinAngle = FloatMath.sin(a);
@@ -70,9 +70,9 @@ public class Quaternion {
 	 */
 	public void fromEuler(float yaw, float pitch, float roll)
 	{	 
-		float p = pitch * NDYMath.PIOVER180 / 2.0f;
-		float y = yaw * NDYMath.PIOVER180 / 2.0f;
-		float r = roll * NDYMath.PIOVER180 / 2.0f;
+		float p = pitch * NDYMath.TO_RADIANS / 2.0f;
+		float y = yaw * NDYMath.TO_RADIANS / 2.0f;
+		float r = roll * NDYMath.TO_RADIANS / 2.0f;
 	 
 		float sinp = FloatMath.sin(p);
 		float siny = FloatMath.sin(y);

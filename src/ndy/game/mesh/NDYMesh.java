@@ -10,6 +10,7 @@ import java.util.Hashtable;
 import ndy.game.NDYRessource;
 import ndy.game.NDYWorld;
 import ndy.game.math.Vector3;
+import android.opengl.GLES20;
 import android.util.Log;
 
 public class NDYMesh extends NDYRessource {
@@ -40,6 +41,50 @@ public class NDYMesh extends NDYRessource {
 			return false;
 		mId = 0;
 		return true;
+	}
+	
+	public static NDYMesh quad2d() {
+		NDYMesh mesh = new NDYMesh("quad1x1");
+		NDYSubMesh submesh = new NDYSubMesh();
+		submesh.name = "quad";
+		submesh.setDesc(NDYSubMesh.VERTEX_DESC_POSITION_TEXCOORDS);
+		
+		float vertices [] = {
+			0.f, 0.f, 0.f, 0.f, 1.f,
+			1.f, 0.f, 0.f, 1.f, 1.f,
+			0.f, 1.f, 0.f, 0.f, 0.f,
+			1.f, 0.f, 0.f, 1.f, 1.f,
+			1.f, 1.f, 0.f, 1.f, 0.f,
+			0.f, 1.f, 0.f, 0.f, 0.f
+		};
+		submesh.setVertices(vertices);
+		
+		mesh.submeshes.put(submesh.name, submesh);
+
+		return mesh;
+	}
+	
+	public static NDYMesh axis3d()  {
+		NDYMesh mesh = new NDYMesh("axis3d");
+		NDYSubMesh submesh = new NDYSubMesh();
+		submesh.name = "axis3d";
+		submesh.setDesc(NDYSubMesh.VERTEX_DESC_POSITION_COLOR);
+		submesh.drawMode = GLES20.GL_LINES;
+		
+		float vertices [] = {
+				0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f,
+				1.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f,
+				0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f,
+				0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 1.f,
+				0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 1.f,
+				0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f
+		};
+		
+		submesh.setVertices(vertices);
+		
+		mesh.submeshes.put(submesh.name, submesh);
+
+		return mesh;
 	}
 }
 
