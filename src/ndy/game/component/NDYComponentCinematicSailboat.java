@@ -12,15 +12,15 @@ import android.util.Log;
 public class NDYComponentCinematicSailboat extends NDYComponentCinematic {
 	private static String TAG = "NDYComponentCinematicSailboat";
 	
-	private static int HEADWIND_STARBOARD = 1; // +x -y
-	private static int HEADWIND_PORTSIDE = 2; // -x -y
-	private static int BACKWIND_STARBOARD = 3; // +x +y
-	private static int BACKWIND_PORTSIDE = 4; // -x +y
+	public static int HEADWIND_STARBOARD = 1; // +x -y
+	public static int HEADWIND_PORTSIDE = 2; // -x -y
+	public static int BACKWIND_STARBOARD = 3; // +x +y
+	public static int BACKWIND_PORTSIDE = 4; // -x +y
 	
 	private int mWindOrientation;
 	
-	private float mMainSailRot = 0; // main sail rotation in degrees
-	private float mJibSailRot = 0; // jib sail rotation in degrees
+	private float mMainSailRot = 0.f; // main sail rotation in degrees
+	private float mJibSailRot = 0.f; // jib sail rotation in degrees
 	
 	public boolean processMessage(NDYMessage msg) {
 		super.processMessage(msg);
@@ -39,8 +39,9 @@ public class NDYComponentCinematicSailboat extends NDYComponentCinematic {
 				
 				float wv = Vector3.dotProduct(v, w);
 				float wd = Vector3.dotProduct(mDir, w);
+				float maxSailAngle = NDYMath.TO_DEGREES*(float)Math.acos(wv);
 				
-				float det = Vector3.det(w, mDir);
+				float det = w.x*mDir.z - w.z*mDir.x;
 				
 				if( wd < 0 ) {
 					if( det < 0 ) {
@@ -48,11 +49,17 @@ public class NDYComponentCinematicSailboat extends NDYComponentCinematic {
 							mWindOrientation = HEADWIND_PORTSIDE;
 							Log.i(TAG, "wind orientation: headwind portside");
 						}
+						
+						if( mMainSailRot < 0.f ) mMainSailRot = 0.f;
+						if( mMainSailRot > maxSailAngle ) mMainSailRot = maxSailAngle;
 					} else {
 						if( mWindOrientation != HEADWIND_STARBOARD ) {
 							mWindOrientation = HEADWIND_STARBOARD;
 							Log.i(TAG, "wind orientation: headwind starboard");
 						}
+						
+						if( mMainSailRot > 0.f ) mMainSailRot = 0.f;
+						if( mMainSailRot < -maxSailAngle ) mMainSailRot = -maxSailAngle;
 					}
 				} else {
 					if( det < 0 ) {
@@ -94,5 +101,9 @@ public class NDYComponentCinematicSailboat extends NDYComponentCinematic {
 	
 	public float getJibSailRot() {
 		return mJibSailRot;
+	}
+	
+	public int getWindOrientation() {
+		return mWindOrientation;
 	}
 }

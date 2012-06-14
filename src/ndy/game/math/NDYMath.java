@@ -22,4 +22,10 @@ public class NDYMath {
 	public static float sign(float a) {
 		return a < 0f ? -1f : 1f;
 	}
+	
+	public static float clamp(float v, float a, float b) {
+		if( v < a ) v = a;
+		if( v > b ) v = b;
+		return v;
+	}
 }

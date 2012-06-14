@@ -65,10 +65,6 @@ public class Vector3 {
 		return this;
 	}
 	
-	public static float det(Vector3 a, Vector3 b) {
-		return a.x*b.z - a.z*b.x;
-	}
-	
 	public static float dotProduct(Vector3 a, Vector3 b) {
 		return a.x*b.x+a.y*b.y+a.z*b.z;
 	}

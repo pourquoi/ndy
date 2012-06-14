@@ -1,5 +1,6 @@
 package ndy.game;
 
+import ndy.game.math.NDYMath;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -53,11 +54,11 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 					mInput.down(lastTouchX, lastTouchY);
 					break;
 				case MotionEvent.ACTION_MOVE:
-					float dx = event.getX() - lastTouchX;
-					float dy = event.getY() - lastTouchY;
+					float dx = NDYMath.clamp(event.getX() - lastTouchX, -3.f, 3.f);
+					float dy = NDYMath.clamp(event.getY() - lastTouchY, -3.f, 3.f);
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
-					Log.d(TAG, "move ("+dx+","+dy+")");
+					//Log.d(TAG, "move ("+dx+","+dy+")");
 
 					mInput.move(dx, dy);
 					break;
