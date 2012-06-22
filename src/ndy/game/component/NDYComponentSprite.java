@@ -36,11 +36,7 @@ public class NDYComponentSprite extends NDYComponent {
 			NDYRessource.addRessource(mProgram);
 		}
 
-		mMesh = (NDYMesh)NDYRessource.getRessource("mesh_quad2d");
-		if( mMesh == null ) {
-			mMesh = NDYMesh.quad2d();
-			NDYRessource.addRessource(mMesh);
-		}
+		mMesh = NDYMesh.quad2d();
 	}
 	
 	@Override
@@ -61,7 +57,7 @@ public class NDYComponentSprite extends NDYComponent {
 	        
 	        p.setWorldAttribs();
 	        
-	        NDYSubMesh quad = mMesh.submeshes.get("quad");
+	        NDYSubMesh quad = mMesh.submeshes.values().iterator().next();
 	        
 	        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexture.getId());

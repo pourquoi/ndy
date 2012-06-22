@@ -44,46 +44,170 @@ public class NDYMesh extends NDYRessource {
 	}
 	
 	public static NDYMesh quad2d() {
-		NDYMesh mesh = new NDYMesh("quad1x1");
-		NDYSubMesh submesh = new NDYSubMesh();
-		submesh.name = "quad";
-		submesh.setDesc(NDYSubMesh.VERTEX_DESC_POSITION_TEXCOORDS);
-		
-		float vertices [] = {
-			0.f, 0.f, 0.f, 0.f, 1.f,
-			1.f, 0.f, 0.f, 1.f, 1.f,
-			0.f, 1.f, 0.f, 0.f, 0.f,
-			1.f, 0.f, 0.f, 1.f, 1.f,
-			1.f, 1.f, 0.f, 1.f, 0.f,
-			0.f, 1.f, 0.f, 0.f, 0.f
-		};
-		submesh.setVertices(vertices);
-		
-		mesh.submeshes.put(submesh.name, submesh);
-
+		String name = "quad2d";
+		NDYMesh mesh = (NDYMesh)NDYRessource.getRessource(name);
+		if( mesh == null ) {
+			mesh = new NDYMesh(name);
+			NDYSubMesh submesh = new NDYSubMesh();
+			submesh.name = name;
+			submesh.setDesc(NDYSubMesh.VERTEX_DESC_POSITION_TEXCOORDS);
+			
+			float vertices [] = {
+				0.f, 0.f, 0.f, 0.f, 1.f,
+				1.f, 0.f, 0.f, 1.f, 1.f,
+				0.f, 1.f, 0.f, 0.f, 0.f,
+				1.f, 0.f, 0.f, 1.f, 1.f,
+				1.f, 1.f, 0.f, 1.f, 0.f,
+				0.f, 1.f, 0.f, 0.f, 0.f
+			};
+			submesh.setVertices(vertices);
+			
+			mesh.submeshes.put(submesh.name, submesh);
+			NDYRessource.addRessource(mesh);
+		}
 		return mesh;
 	}
 	
 	public static NDYMesh axis3d()  {
-		NDYMesh mesh = new NDYMesh("axis3d");
-		NDYSubMesh submesh = new NDYSubMesh();
-		submesh.name = "axis3d";
-		submesh.setDesc(NDYSubMesh.VERTEX_DESC_POSITION_COLOR);
-		submesh.drawMode = GLES20.GL_LINES;
-		
-		float vertices [] = {
-				0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f,
-				1.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f,
-				0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f,
-				0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 1.f,
-				0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 1.f,
-				0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f
-		};
-		
-		submesh.setVertices(vertices);
-		
-		mesh.submeshes.put(submesh.name, submesh);
+		String name = "axis3d";
+		NDYMesh mesh = (NDYMesh)NDYRessource.getRessource(name);
+		if( mesh == null ) {
+			mesh = new NDYMesh(name);
+			NDYSubMesh submesh = new NDYSubMesh();
+			submesh.name = "axis3d";
+			submesh.setDesc(NDYSubMesh.VERTEX_DESC_POSITION_COLOR);
+			submesh.drawMode = GLES20.GL_LINES;
+			
+			float vertices [] = {
+					0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f,
+					1.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f,
+					0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 1.f,
+					0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 1.f,
+					0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 1.f,
+					0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f
+			};
+			
+			submesh.setVertices(vertices);
+			
+			mesh.submeshes.put(submesh.name, submesh);
+			NDYRessource.addRessource(mesh);
+		}
 
+		return mesh;
+	}
+
+	// TODO make it work for odd chunk numbers
+	public static NDYMesh plan(int cx, int cz) {
+		String name = "plan_"+cx+"x"+cz;
+		NDYMesh mesh = (NDYMesh)NDYRessource.getRessource(name);
+		if( mesh == null ) {
+			mesh = new NDYMesh(name);
+			NDYSubMesh submesh = new NDYSubMesh();
+			submesh.name = name;
+			submesh.setDesc(NDYSubMesh.VERTEX_DESC_POSITION_TEXCOORDS);
+			submesh.drawMode = GLES20.GL_TRIANGLE_STRIP;
+			
+			int oz = 0;
+			int ox = 0;
+			float dx = 1.f/(float)cx;
+			float dz = 1.f/(float)cz;
+			float x = 0.f;
+			float z = 0.f;
+			
+			float [] v = new float[5*(cx*cz*2+cx+1)];
+			int vi = 0;
+			// (0,0,0)
+			v[vi++] = 0.f;
+			v[vi++] = 0.f;
+			v[vi++] = 0.f;
+			v[vi++] = 0.f;
+			v[vi++] = 1.f;
+			
+			for(int i=0; i<cx; i++) {
+				ox = i%2;
+				x = (float)i/(float)cx;				
+				if( ox == 0 ) {
+					// (x+dx,0,0)
+					v[vi++] = x+dx;
+					v[vi++] = 0.f;
+					v[vi++] = 0.f;
+					
+						v[vi++] = 1.f;
+						v[vi++] = 1.f;
+					
+				} else {
+					// (x+dx,0,1)
+					v[vi++] = x+dx;
+					v[vi++] = 0.f;
+					v[vi++] = 1.f;
+					//v[vi++] = r;v[vi++] = g;v[vi++] = 0.f;v[vi++]=1.f;
+					
+						v[vi++] = 0.f;
+						v[vi++] = 1.f;
+					
+				}
+				
+				for(int j=0; j<cz; j++) {
+					oz = j%2;
+					if( ox == 0 ) {
+						z = (float)j/(float)cz;
+						// (x,0,z+dz)
+						v[vi++] = x;
+						v[vi++] = 0.f;
+						v[vi++] = z+dz;
+						if( oz == 0 ) {
+							v[vi++] = 0.f;
+							v[vi++] = 0.f;
+						} else {
+							v[vi++] = 0.f;
+							v[vi++] = 1.f;
+						}
+
+						// (x+dx,0,z+dz)
+						v[vi++] = x+dx;
+						v[vi++] = 0.f;
+						v[vi++] = z+dz;						
+						if( oz == 0 ) {
+							v[vi++] = 1.f;
+							v[vi++] = 0.f;
+						} else {
+							v[vi++] = 1.f;
+							v[vi++] = 1.f;
+						}
+					} else {
+						z = (float)(cz-j-1)/(float)cz;
+						// (x,0,z)
+						v[vi++] = x;
+						v[vi++] = 0.f;
+						v[vi++] = z;
+						if( oz == 0 ) {
+							v[vi++] = 1.f;
+							v[vi++] = 0.f;
+						} else {
+							v[vi++] = 1.f;
+							v[vi++] = 1.f;
+						}
+						
+						// (x+dx,0,z)
+						v[vi++] = x+dx;
+						v[vi++] = 0.f;
+						v[vi++] = z;
+						
+						if( oz == 0 ) {
+							v[vi++] = 0.f;
+							v[vi++] = 0.f;
+						} else {
+							v[vi++] = 0.f;
+							v[vi++] = 1.f;
+						}
+					}
+				}
+			}
+			submesh.setVertices(v);
+			mesh.submeshes.put(submesh.name, submesh);
+			
+			NDYRessource.addRessource(mesh);
+		}
 		return mesh;
 	}
 }
@@ -140,7 +264,7 @@ class NDYMeshLoader {
 		            	in.read(buffer);
 		            	v.x = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getFloat();
 		            	in.read(buffer);
-		            	v.z = -ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+		            	v.z = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getFloat();
 		            	in.read(buffer);
 		            	v.y = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getFloat();
 		            	

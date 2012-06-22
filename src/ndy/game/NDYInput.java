@@ -10,13 +10,15 @@ public class NDYInput {
 		NDYUI ui = NDYWorld.current.getUI();
 		if( ui != null ) {
 			NDYTransformable r = NDYWorld.current.getRacer();
-			if( ui.getFocus() == NDYUI.FOCUS_MAINSAIL ) {
-				NDYComponentCinematicSailboat b = (NDYComponentCinematicSailboat)r.findComponent("cinematic");
-				if( b != null ) {
-					b.setMainSailRot(b.getMainSailRot()+dx);
+			if( r != null ) {
+				if( ui.getFocus() == NDYUI.FOCUS_MAINSAIL ) {
+					NDYComponentCinematicSailboat b = (NDYComponentCinematicSailboat)r.findComponent("cinematic");
+					if( b != null ) {
+						b.setMainSailRot(b.getMainSailRot()+dx);
+					}
+				} else if( ui.getFocus() == NDYUI.FOCUS_RUDDER ) {
+					r.getRot().y -= dx;
 				}
-			} else if( ui.getFocus() == NDYUI.FOCUS_RUDDER ) {
-				r.getRot().y += dx;
 			}
 		}
 		

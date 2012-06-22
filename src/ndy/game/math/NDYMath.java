@@ -28,4 +28,14 @@ public class NDYMath {
 		if( v > b ) v = b;
 		return v;
 	}
+	
+	public static float clampDegrees(float v) {
+		float a = v / 360.f;
+		
+		v -= ((int)a) * 360.f;
+		
+		if( v < 0.f ) v += 360.f; 
+		
+		return v;
+	}
 }

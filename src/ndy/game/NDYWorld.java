@@ -27,7 +27,8 @@ public class NDYWorld {
 	private Context mContext;
 	private long mTime = 0;
 	protected float [] mLightDir = new float[3];
-	protected Vector3 mWindDir = new Vector3();
+	protected float mWindRot = 45.f;
+	protected float mWindSpeed = 5.f; // m/s
 	
 	public static NDYWorld current;
 			
@@ -42,10 +43,6 @@ public class NDYWorld {
 	}
 	
 	public void init() {
-		mWindDir.x = 1;
-		mWindDir.z = 1;
-		mWindDir.normalize();
-		
 		// main directional light
 		mLightDir[0] = 0.1f;
 		mLightDir[1] = -0.5f;
@@ -70,7 +67,7 @@ public class NDYWorld {
 		
 		// create the racer
 		mRacer = new NDYTransformable();
-		mRacer.setPos(0f, 0f, 10.f);
+		mRacer.setPos(0f, 0f, 0.f);
 		// attach a mesh component
 		NDYComponentMesh meshComponent = new NDYComponentMeshSailboat("models/ship.3ds", "shaders/basic", null);		
 		mRacer.addComponent(meshComponent);
@@ -81,17 +78,17 @@ public class NDYWorld {
 		
 		NDYComponentFollow followComponent = new NDYComponentFollow(mRacer, 120f);
 		mCamera.addComponent(followComponent);
-		
+		/*
 		NDYTransformable plan = new NDYTransformable();
 		meshComponent = new NDYComponentMesh("models/plan.3ds", "shaders/basic_textured", "textures/sand_2.jpg");
 		plan.addComponent(meshComponent);
 		mActors.add(plan);
+		*/
 
 		NDYTransformable axis3D = new NDYTransformable();
 		axis3D.setScale(1000,1000,1000);
 		NDYMesh mesh = NDYMesh.axis3d();
-		NDYRessource.addRessource(mesh);
-		meshComponent = new NDYComponentMesh(mesh.toString(),"shaders/axis",null);
+		meshComponent = new NDYComponentMesh(mesh.toString(),"shaders/basic_colored",null);
 		axis3D.addComponent(meshComponent);
 		mActors.add(axis3D);
 		
@@ -99,7 +96,14 @@ public class NDYWorld {
 		meshComponent = new NDYComponentMesh("models/arrow.3ds", "shaders/basic", null);
 		arrow.addComponent(meshComponent);
 		mActors.add(arrow);
-		arrow.setRot(0, (float)Math.acos(mWindDir.x)*NDYMath.TO_DEGREES+180, 0);
+		arrow.setRot(0, mWindRot, 0);
+		
+		NDYTransformable terrain = new NDYTransformable();
+		mesh = NDYMesh.plan(4, 4);
+		meshComponent = new NDYComponentMesh(mesh.toString(),"shaders/basic_textured","textures/sand_2.jpg");
+		terrain.addComponent(meshComponent);
+		terrain.setScale(100, 0, 100);
+		mActors.add(terrain);
 	}
 	
 	public void update(long dt) {
@@ -162,8 +166,12 @@ public class NDYWorld {
 		return mLightDir;
 	}
 	
-	public Vector3 getWindDir() {
-		return mWindDir;
+	public float getWindRot() {
+		return mWindRot;
+	}
+	
+	public float getWindSpeed() {
+		return mWindSpeed;
 	}
 	
 	public NDYUI getUI() {

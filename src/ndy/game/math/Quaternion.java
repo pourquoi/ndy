@@ -63,7 +63,7 @@ public class Quaternion {
 	}
 	
 	/**
-	 * Init quaternion from euler angles in degrees.
+	 * Init quaternion from euler angles in degrees and in opengl coordinates system.
 	 * @param float yaw rotation around Y
 	 * @param float pitch rotation around X
 	 * @param float roll rotation around Z
@@ -71,7 +71,7 @@ public class Quaternion {
 	public void fromEuler(float yaw, float pitch, float roll)
 	{	 
 		float p = pitch * NDYMath.TO_RADIANS / 2.0f;
-		float y = yaw * NDYMath.TO_RADIANS / 2.0f;
+		float y = -yaw * NDYMath.TO_RADIANS / 2.0f;
 		float r = roll * NDYMath.TO_RADIANS / 2.0f;
 	 
 		float sinp = FloatMath.sin(p);

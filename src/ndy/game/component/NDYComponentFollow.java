@@ -12,8 +12,7 @@ public class NDYComponentFollow extends NDYComponent {
 	protected NDYTransformable mTarget;
 	protected float mDistance;
 	
-	protected float mMaxSpeed = 0.1f;
-	protected float mMaxDistFactor = 0.1f;
+	protected float mSpeedFactor = 0.8f;
 	
 	public NDYComponentFollow(NDYTransformable target, float distance) {
 		super("follow");
@@ -30,13 +29,13 @@ public class NDYComponentFollow extends NDYComponent {
 					Vector3 cpos = c.getPos();
 					Vector3 dir = new Vector3(cinematic.getDir());
 					Vector3 pos = new Vector3(mTarget.getPos()).substract(dir.scale(mDistance));
+					float r = NDYMath.abs((pos.distance(cpos)-mDistance)/mDistance);
+					float rr = r*r*mSpeedFactor;
+					float dx = NDYMath.max(1.f, rr*NDYMath.abs(pos.x-cpos.x));
+					float dz = NDYMath.max(1.f, rr*NDYMath.abs(pos.z-cpos.z));
 					
-					float m = mDistance*mMaxDistFactor;
-					float v = NDYMath.max(1f, mMaxSpeed * NDYMath.min(m, pos.distance(cpos)) / m);
-					
-					if( NDYMath.abs(pos.x-cpos.x) > v ) cpos.x += NDYMath.sign(pos.x-cpos.x) * v;
-//					if( NDYMath.abs(pos.y-cpos.y) > v ) cpos.y += NDYMath.sign(pos.y-cpos.y) * v;
-					if( NDYMath.abs(pos.z-cpos.z) > v ) cpos.z += NDYMath.sign(pos.z-cpos.z) * v;
+					cpos.x += NDYMath.sign(pos.x-cpos.x) * NDYMath.min(NDYMath.abs(pos.x-cpos.x), dx);
+					cpos.z += NDYMath.sign(pos.z-cpos.z) * NDYMath.min(NDYMath.abs(pos.z-cpos.z), dz);
 				}
 
 				c.setTarget(mTarget.getPos().x, mTarget.getPos().y, mTarget.getPos().z);

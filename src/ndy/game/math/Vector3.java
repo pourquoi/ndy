@@ -36,6 +36,10 @@ public class Vector3 {
 		return FloatMath.sqrt(x*x + y*y + z*z);
 	}
 	
+	public float squaredLength() {
+		return x*x + y*y + z*z;
+	}
+	
 	public float distance(Vector3 v) {
 		Vector3 v2 = new Vector3(this);
 		return v2.substract(v).length();
@@ -63,6 +67,10 @@ public class Vector3 {
 		z *= s;
 		
 		return this;
+	}
+	
+	public String toString() {
+		return "["+x+","+y+","+z+"]";
 	}
 	
 	public static float dotProduct(Vector3 a, Vector3 b) {

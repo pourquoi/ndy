@@ -12,13 +12,13 @@ public class NDYComponentCinematic extends NDYComponent {
 	public NDYComponentCinematic() {
 		super("cinematic");
 		
-		mDir = new Vector3(0f,0f,1f);
+		mDir = new Vector3(1f,0f,0f);
 	}
 	
 	public boolean processMessage(NDYMessage msg) {
 		if( msg.getClass() == NDYMessageUpdate.class ) {
 			NDYTransformable r = (NDYTransformable)mParent;
-			Vector3 dir = new Vector3(0f,0f,1f);
+			Vector3 dir = new Vector3(1f,0f,0f);
 			mDir = r.getRotQ().rotateVector(dir);
 		}
 		
