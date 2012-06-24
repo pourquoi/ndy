@@ -24,6 +24,10 @@ public class NDYComponentCinematicSailboat extends NDYComponentCinematic {
 	
 	private float mSpeed = 0.f; // boat speed in m/s
 	private float mWeight = 550.f; // in kg
+	
+	public NDYComponentCinematicSailboat() {
+		NDYWorld.current.getUI().addGraph("boat speed", 1.f, 0.f, 0.f);
+	}
 
 	public boolean processMessage(NDYMessage msg) {
 		super.processMessage(msg);
@@ -92,6 +96,8 @@ public class NDYComponentCinematicSailboat extends NDYComponentCinematic {
 				if( mSpeed > 1.5f*NDYWorld.current.getWindSpeed() ) mSpeed = 1.5f*NDYWorld.current.getWindSpeed();
 				
 				v_speed = new Vector3(v_boat_dir).scale(mSpeed);
+				
+				NDYWorld.current.getUI().addGraphPoint("boat speed", mSpeed);
 				
 				Vector3 pos = boat.getPos();
 			//	pos.add(v_speed);

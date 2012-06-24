@@ -78,6 +78,7 @@ public class NDYWorld {
 		
 		NDYComponentFollow followComponent = new NDYComponentFollow(mRacer, 120f);
 		mCamera.addComponent(followComponent);
+		
 		/*
 		NDYTransformable plan = new NDYTransformable();
 		meshComponent = new NDYComponentMesh("models/plan.3ds", "shaders/basic_textured", "textures/sand_2.jpg");

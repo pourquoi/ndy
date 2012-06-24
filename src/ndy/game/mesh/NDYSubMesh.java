@@ -59,7 +59,7 @@ public class NDYSubMesh {
 		return mDesc;
 	}
 	
-	protected void setVertices(float [] vertices) {
+	public void setVertices(float [] vertices) {
 		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * NDYMesh.FLOAT_SIZE_BYTES);
 		vbb.order(ByteOrder.nativeOrder());
 		vbuffer = vbb.asFloatBuffer();
@@ -67,7 +67,7 @@ public class NDYSubMesh {
 		vbuffer.position(0);
 	}
 	
-	protected void setIndices(short [] indices) {
+	public void setIndices(short [] indices) {
 		ByteBuffer ibb = ByteBuffer.allocateDirect(indices.length * NDYMesh.SHORT_SIZE_BYTES);
 		ibb.order(ByteOrder.nativeOrder());
 		ibuffer = ibb.asShortBuffer();

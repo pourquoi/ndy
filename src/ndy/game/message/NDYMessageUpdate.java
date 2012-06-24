@@ -1,17 +1,17 @@
 package ndy.game.message;
 
 public class NDYMessageUpdate extends NDYMessage {
-	protected float mInterval; // dt in ms
+	protected long mInterval; // dt in ms
 
 	public NDYMessageUpdate() {
 		super("update");
 	}
 	
-	public float getInterval() {
+	public long getInterval() {
 		return mInterval;
 	}
 	
-	public void setInterval(float dt) {
+	public void setInterval(long dt) {
 		mInterval = dt;
 	}
 }

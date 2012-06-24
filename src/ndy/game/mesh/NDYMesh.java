@@ -44,7 +44,7 @@ public class NDYMesh extends NDYRessource {
 	}
 	
 	public static NDYMesh quad2d() {
-		String name = "quad2d";
+		String name = "mesh/quad2d";
 		NDYMesh mesh = (NDYMesh)NDYRessource.getRessource(name);
 		if( mesh == null ) {
 			mesh = new NDYMesh(name);
@@ -69,7 +69,7 @@ public class NDYMesh extends NDYRessource {
 	}
 	
 	public static NDYMesh axis3d()  {
-		String name = "axis3d";
+		String name = "mesh/axis3d";
 		NDYMesh mesh = (NDYMesh)NDYRessource.getRessource(name);
 		if( mesh == null ) {
 			mesh = new NDYMesh(name);
@@ -98,7 +98,7 @@ public class NDYMesh extends NDYRessource {
 
 	// TODO make it work for odd chunk numbers
 	public static NDYMesh plan(int cx, int cz) {
-		String name = "plan_"+cx+"x"+cz;
+		String name = "mesh/plan_"+cx+"x"+cz;
 		NDYMesh mesh = (NDYMesh)NDYRessource.getRessource(name);
 		if( mesh == null ) {
 			mesh = new NDYMesh(name);

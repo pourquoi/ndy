@@ -63,6 +63,8 @@ public class NDYComponentSprite extends NDYComponent {
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexture.getId());
 			
 			Matrix.setIdentityM(mMatrix, 0);
+			Vector3 pos = r.getPos();
+			Matrix.translateM(mMatrix, 0, pos.x, pos.y, pos.z);
 			Vector3 scale = r.getScale();
 			Matrix.scaleM(mMatrix, 0, scale.x, scale.y, 0);
 			
