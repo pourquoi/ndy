@@ -1,4 +1,4 @@
-package ndy.game.actor;
+package ndy.game;
 
 import ndy.game.math.Vector3;
 import ndy.game.message.NDYMessage;
@@ -7,11 +7,12 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 
-public class NDYCamera extends NDYTransformable {
+public class NDYCamera extends NDYActor {
 	public static int MODE_ORTHO = 1;
 	public static int MODE_PERSPECTIVE = 2;
 
 	private static String TAG = "NDYCamera";
+	protected Vector3 mPos = new Vector3();
 	protected Vector3 mTarget = new Vector3();
 	protected float [] mViewMatrix = new float[16];
 	protected float [] mProjectionMatrix = new float[16];
@@ -55,6 +56,16 @@ public class NDYCamera extends NDYTransformable {
 	
 	public float [] getViewMatrix() {
 		return mViewMatrix;
+	}
+	
+	public Vector3 getPos() {
+		return mPos;
+	}
+	
+	public void setPos(float x, float y, float z) {
+		mPos.x = x;
+		mPos.y = y;
+		mPos.z = z;
 	}
 	
 	public void setTarget(float x, float y, float z) {

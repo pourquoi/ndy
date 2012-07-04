@@ -1,7 +1,7 @@
 package ndy.game.component;
 
+import ndy.game.NDYActor;
 import ndy.game.NDYWorld;
-import ndy.game.actor.NDYTransformable;
 import ndy.game.math.NDYMath;
 import ndy.game.math.Vector3;
 import ndy.game.message.NDYMessage;
@@ -26,7 +26,7 @@ public class NDYComponentCinematicSailboat extends NDYComponentCinematic {
 	private float mWeight = 550.f; // in kg
 	
 	public NDYComponentCinematicSailboat() {
-		NDYWorld.current.getUI().addGraph("boat speed", 1.f, 0.f, 0.f);
+		//NDYWorld.current.getUI().addGraph("boat speed", 1.f, 0.f, 0.f);
 	}
 
 	public boolean processMessage(NDYMessage msg) {
@@ -34,12 +34,13 @@ public class NDYComponentCinematicSailboat extends NDYComponentCinematic {
 		
 		if( msg.getClass() == NDYMessageUpdate.class ) {
 			float dt = ((NDYMessageUpdate)msg).getInterval();
-			NDYTransformable boat = (NDYTransformable)mParent;
+			NDYActor boat = mParent;
+			NDYComponentTransformation trans = (NDYComponentTransformation)boat.findComponent("transformation");
 			NDYComponentMeshSailboat mesh = (NDYComponentMeshSailboat)boat.findComponent("mesh");
 			
-			if( mesh != null ) {				
+			if( trans != null && mesh != null ) {				
 				float a_wind = NDYWorld.current.getWindRot();
-				float a_boat = boat.getRot().y;
+				float a_boat = trans.getRot().y;
 				float a_mainsail = mMainSailRot + a_boat;
 				
 				float a_boat_wind = NDYMath.clampDegrees(a_boat - a_wind);
@@ -97,9 +98,9 @@ public class NDYComponentCinematicSailboat extends NDYComponentCinematic {
 				
 				v_speed = new Vector3(v_boat_dir).scale(mSpeed);
 				
-				NDYWorld.current.getUI().addGraphPoint("boat speed", mSpeed);
+				//NDYWorld.current.getUI().addGraphPoint("boat speed", mSpeed);
 				
-				Vector3 pos = boat.getPos();
+				Vector3 pos = trans.getPos();
 			//	pos.add(v_speed);
 			}
 		}

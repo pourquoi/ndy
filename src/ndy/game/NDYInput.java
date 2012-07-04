@@ -1,15 +1,13 @@
 package ndy.game;
 
-import ndy.game.actor.NDYCamera;
-import ndy.game.actor.NDYTransformable;
 import ndy.game.component.NDYComponentCinematicSailboat;
-import ndy.game.math.Vector3;
+import ndy.game.component.NDYComponentTransformation;
 
 public class NDYInput {
 	public void move(float dx, float dy) {
 		NDYUI ui = NDYWorld.current.getUI();
 		if( ui != null ) {
-			NDYTransformable r = NDYWorld.current.getRacer();
+			NDYActor r = NDYWorld.current.getRacer();
 			if( r != null ) {
 				if( ui.getFocus() == NDYUI.FOCUS_MAINSAIL ) {
 					NDYComponentCinematicSailboat b = (NDYComponentCinematicSailboat)r.findComponent("cinematic");
@@ -17,7 +15,8 @@ public class NDYInput {
 						b.setMainSailRot(b.getMainSailRot()+dx);
 					}
 				} else if( ui.getFocus() == NDYUI.FOCUS_RUDDER ) {
-					r.getRot().y -= dx;
+					NDYComponentTransformation trans = (NDYComponentTransformation)r.findComponent("transformation");
+					if( trans != null ) trans.getRot().y -= dx;
 				}
 			}
 		}

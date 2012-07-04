@@ -3,11 +3,10 @@ package ndy.game.component;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import ndy.game.NDYActor;
 import ndy.game.NDYGLSurfaceView;
 import ndy.game.NDYRessource;
 import ndy.game.NDYWorld;
-import ndy.game.actor.NDYCamera;
-import ndy.game.actor.NDYTransformable;
 import ndy.game.material.NDYMaterial;
 import ndy.game.material.NDYTexture;
 import ndy.game.math.Quaternion;
@@ -40,7 +39,7 @@ public class NDYComponentMesh extends NDYComponent {
 		}
 		NDYProgram program = (NDYProgram)NDYRessource.getRessource(programName);
 		if( program == null ) {
-			program = new NDYProgramBasic(programName);
+			program = NDYProgram.factory(programName);
 			NDYRessource.addRessource(program);
 		}
 		
@@ -60,11 +59,12 @@ public class NDYComponentMesh extends NDYComponent {
 	}
 	
 	protected void computeModelMatrix(NDYSubMesh submesh) {
-		NDYTransformable r = (NDYTransformable)mParent;
+		NDYActor r = mParent;
+		NDYComponentTransformation trans = (NDYComponentTransformation)r.findComponent("transformation");
 		
-		Vector3 pos = r.getPos();
-		Vector3 scale = r.getScale();
-		Quaternion q = r.getRotQ();
+		Vector3 pos = trans.getPos();
+		Vector3 scale = trans.getScale();
+		Quaternion q = trans.getRotQ();
 
 		NDYAnimation anim = mMesh.animations.get(submesh.animation);
 		if(anim!=null) {
@@ -81,25 +81,16 @@ public class NDYComponentMesh extends NDYComponent {
 	
 	@Override
 	public boolean processMessage(NDYMessage msg) {
-		NDYTransformable r = (NDYTransformable)mParent;
-		
 		if( msg.getClass() == NDYMessageRender.class ) {
 			if( mMaterial.texture != null ) {
 				GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mMaterial.texture.getId());
 			}
 			
-			/*
-			GLES20.glEnable(GLES20.GL_BLEND);
-			GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-			*/
-			
 	        GLES20.glUseProgram(mProgram.getId());
 	        NDYGLSurfaceView.checkGLError("glUseProgram");
 	        
 	        NDYProgramBasic p = (NDYProgramBasic)mProgram;
-	        
-	        NDYWorld w = NDYWorld.current;
 	        
 	        p.setWorldAttribs();
 	        

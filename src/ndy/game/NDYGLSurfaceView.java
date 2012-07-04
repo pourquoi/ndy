@@ -4,6 +4,7 @@ import ndy.game.math.NDYMath;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -12,14 +13,16 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 	private static String TAG = "NDYGLSurfaceView";
 	private float lastTouchX, lastTouchY;
 	private NDYInput mInput = new NDYInput();
+	private long mLastMoveTime = 0;
+	private NDYRenderer mRenderer;
 
 	public NDYGLSurfaceView(Context context) {
 		super(context);
 		setEGLContextClientVersion(2);
 		setEGLConfigChooser(true);
 
-		NDYRenderer renderer = new NDYRenderer();
-		setRenderer(renderer);
+		mRenderer = new NDYRenderer();
+		setRenderer(mRenderer);
 	}
 
 	public static void checkGLError(String op) {
@@ -32,13 +35,25 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 
 	@Override
 	public boolean onTouchEvent(final MotionEvent event) {
-		final int width = this.getWidth();
-		final int height = this.getHeight();
+		final int action = event.getAction();
+		long t = SystemClock.uptimeMillis();
+		
+		if(action == MotionEvent.ACTION_MOVE) {
+			if( t-mLastMoveTime < 16 ) {
+				return true;
+			} else {
+				mLastMoveTime = t;
+			}
+		}
+		
+		if(action == MotionEvent.ACTION_DOWN) {
+			Log.d(TAG, "FPS: "+mRenderer.mFPS);
+		}
 
 		this.queueEvent(new Runnable() {
 			@Override
 			public void run() {
-				switch (event.getAction()) {
+				switch (action) {
 				case MotionEvent.ACTION_UP:
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
@@ -58,14 +73,14 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 					float dy = NDYMath.clamp(event.getY() - lastTouchY, -3.f, 3.f);
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
-					//Log.d(TAG, "move ("+dx+","+dy+")");
 
-					mInput.move(dx, dy);
+					mInput.move(dx, dy);					
 					break;
 				default:
 				}
 			}
 		});
+		
 		return true;
 	}
 }

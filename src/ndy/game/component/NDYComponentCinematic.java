@@ -1,6 +1,6 @@
 package ndy.game.component;
 
-import ndy.game.actor.NDYTransformable;
+import ndy.game.NDYActor;
 import ndy.game.math.Vector3;
 import ndy.game.message.NDYMessage;
 import ndy.game.message.NDYMessageUpdate;
@@ -17,9 +17,12 @@ public class NDYComponentCinematic extends NDYComponent {
 	
 	public boolean processMessage(NDYMessage msg) {
 		if( msg.getClass() == NDYMessageUpdate.class ) {
-			NDYTransformable r = (NDYTransformable)mParent;
-			Vector3 dir = new Vector3(1f,0f,0f);
-			mDir = r.getRotQ().rotateVector(dir);
+			NDYActor r = mParent;
+			NDYComponentTransformation trans = (NDYComponentTransformation)r.findComponent("transformation");
+			if( trans != null ) {
+				Vector3 dir = new Vector3(1f,0f,0f);
+				mDir = trans.getRotQ().rotateVector(dir);
+			}
 		}
 		
 		return false;

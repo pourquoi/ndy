@@ -1,6 +1,6 @@
 package ndy.game.component;
 
-import ndy.game.actor.NDYActor;
+import ndy.game.NDYActor;
 import ndy.game.message.NDYMessage;
 
 

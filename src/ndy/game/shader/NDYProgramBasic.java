@@ -1,9 +1,9 @@
 package ndy.game.shader;
 
+import ndy.game.NDYCamera;
 import ndy.game.NDYGLSurfaceView;
 import ndy.game.NDYRessource;
 import ndy.game.NDYWorld;
-import ndy.game.actor.NDYCamera;
 import android.opengl.GLES20;
 
 public class NDYProgramBasic extends NDYProgram {

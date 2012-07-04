@@ -132,19 +132,16 @@ public class NDYMesh extends NDYRessource {
 					v[vi++] = 0.f;
 					v[vi++] = 0.f;
 					
-						v[vi++] = 1.f;
-						v[vi++] = 1.f;
-					
+					v[vi++] = 1.f;
+					v[vi++] = 1.f;					
 				} else {
 					// (x+dx,0,1)
 					v[vi++] = x+dx;
 					v[vi++] = 0.f;
 					v[vi++] = 1.f;
-					//v[vi++] = r;v[vi++] = g;v[vi++] = 0.f;v[vi++]=1.f;
 					
-						v[vi++] = 0.f;
-						v[vi++] = 1.f;
-					
+					v[vi++] = 0.f;
+					v[vi++] = 1.f;					
 				}
 				
 				for(int j=0; j<cz; j++) {

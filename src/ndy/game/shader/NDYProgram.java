@@ -13,6 +13,14 @@ public class NDYProgram extends NDYRessource {
 	
 	public int mPositionHandle;
 	
+	public static NDYProgram factory(String programName) {
+		if(programName.contains("water")) {
+			return new NDYProgramWater(programName);
+		} else {
+			return new NDYProgramBasic(programName);
+		}
+	}
+	
 	public NDYProgram(String name) {
 		super(name);
 	}

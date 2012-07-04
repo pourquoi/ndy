@@ -2,10 +2,9 @@ package ndy.game;
 
 import java.util.Hashtable;
 
-import ndy.game.actor.NDYActor;
-import ndy.game.actor.NDYTransformable;
 import ndy.game.component.NDYComponentGraph;
 import ndy.game.component.NDYComponentSprite;
+import ndy.game.component.NDYComponentTransformation;
 import ndy.game.message.NDYMessage;
 import ndy.game.message.NDYMessageRender;
 import ndy.game.message.NDYMessageUpdate;
@@ -20,19 +19,16 @@ public class NDYUI extends NDYActor {
 	private Hashtable<String, NDYComponentGraph> mGraphs = new Hashtable<String, NDYComponentGraph>();
 		
 	public NDYUI() {
-		NDYTransformable t = new NDYTransformable();
-		t.getScale().x = 100;
-		t.getScale().y = 100;
+		NDYActor t = new NDYActor();
+		NDYComponentTransformation trans = new NDYComponentTransformation();
+		trans.getScale().x = 100;
+		trans.getScale().y = 100;
+		t.addComponent(trans);
 		NDYComponentSprite s = new NDYComponentSprite("textures/cube.png", "shaders/sprite");
 		t.addComponent(s);
-	//	NDYWorld.current.addActor(t);
+		//NDYWorld.current.addActor(t);
 		
-		t = new NDYTransformable();
-		NDYComponentGraph g = new NDYComponentGraph(300,100,"shaders/basic_colored");
-		t.addComponent(g);
-		NDYWorld.current.addActor(t);
-		
-		mGraphs.put("default", g);
+		//addGraph("default", 0.f, 0.f, 0.f);
 	}
 	
 	@Override
@@ -61,7 +57,9 @@ public class NDYUI extends NDYActor {
 	public void addGraph(String name, float r, float g, float b) {
 		NDYComponentGraph graph = mGraphs.get(name);
 		if(graph == null) {
-			NDYTransformable t = new NDYTransformable();
+			NDYActor t = new NDYActor();
+			NDYComponentTransformation trans = new NDYComponentTransformation();
+			t.addComponent(trans);
 			graph = new NDYComponentGraph(300,100,"shaders/basic_colored");
 			graph.setColor(r, g, b);
 			t.addComponent(graph);

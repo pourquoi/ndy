@@ -9,9 +9,13 @@ import android.os.SystemClock;
 import android.util.Log;
 
 public class NDYRenderer implements GLSurfaceView.Renderer {
+	private static String TAG = "NDYRenderer";
+
 	private long mAccumulator = 0;
 	private long mCurrentTime = 0;
 	private long mTimeStep = 10;
+	
+	public float mFPS = 0.f;
 	
 	public NDYRenderer() {
 		mCurrentTime = SystemClock.uptimeMillis();
@@ -49,7 +53,7 @@ public class NDYRenderer implements GLSurfaceView.Renderer {
 
 		long newTime = SystemClock.uptimeMillis();
 		long frameTime = newTime - mCurrentTime;
-		
+		/*
 		if( frameTime > mTimeStep*5 ) frameTime = mTimeStep*5;
 		
 		mCurrentTime = newTime;
@@ -59,6 +63,12 @@ public class NDYRenderer implements GLSurfaceView.Renderer {
 			NDYWorld.current.update(mTimeStep);
 			mAccumulator -= mTimeStep;
 		}
+		*/
+		
+		NDYWorld.current.update(frameTime);
+		mCurrentTime = newTime;
+		
+		mFPS = 1000.f / (float)frameTime;
 		
 		GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         GLES20.glClear( GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);

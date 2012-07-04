@@ -1,4 +1,4 @@
-package ndy.game.actor;
+package ndy.game;
 
 import java.util.Hashtable;
 

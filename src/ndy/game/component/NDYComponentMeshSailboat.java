@@ -1,6 +1,6 @@
 package ndy.game.component;
 
-import ndy.game.actor.NDYTransformable;
+import ndy.game.NDYActor;
 import ndy.game.math.Quaternion;
 import ndy.game.math.Vector3;
 import ndy.game.mesh.NDYSubMesh;
@@ -26,11 +26,12 @@ public class NDYComponentMeshSailboat extends NDYComponentMesh {
 
 	@Override
 	protected void computeModelMatrix(NDYSubMesh submesh) {
-		NDYTransformable r = (NDYTransformable)mParent;
+		NDYActor r = mParent;
+		NDYComponentTransformation trans = (NDYComponentTransformation)r.findComponent("transformation");
 		NDYComponentCinematicSailboat cinematic = (NDYComponentCinematicSailboat)r.findComponent("cinematic");
 		
-		Vector3 pos = r.getPos();
-		Quaternion q = r.getRotQ();
+		Vector3 pos = trans.getPos();
+		Quaternion q = trans.getRotQ();
 		if( cinematic != null ) {
 			if(submesh.name.equals(NDYComponentMeshSailboat.T_MAINSAIL)) {
 				Quaternion q2 = new Quaternion();

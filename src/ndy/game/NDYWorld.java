@@ -2,15 +2,11 @@ package ndy.game;
 
 import java.util.ArrayList;
 
-import ndy.game.actor.NDYActor;
-import ndy.game.actor.NDYCamera;
-import ndy.game.actor.NDYTransformable;
 import ndy.game.component.NDYComponentCinematicSailboat;
 import ndy.game.component.NDYComponentFollow;
 import ndy.game.component.NDYComponentMesh;
 import ndy.game.component.NDYComponentMeshSailboat;
-import ndy.game.math.NDYMath;
-import ndy.game.math.Vector3;
+import ndy.game.component.NDYComponentTransformation;
 import ndy.game.mesh.NDYMesh;
 import ndy.game.message.NDYMessageRender;
 import ndy.game.message.NDYMessageUpdate;
@@ -23,7 +19,7 @@ public class NDYWorld {
 	private NDYCamera mCamera;
 	private NDYCamera mCameraPerspective;
 	private NDYCamera mCameraOrtho;
-	private NDYTransformable mRacer;
+	private NDYActor mRacer;
 	private Context mContext;
 	private long mTime = 0;
 	protected float [] mLightDir = new float[3];
@@ -45,8 +41,8 @@ public class NDYWorld {
 	public void init() {
 		// main directional light
 		mLightDir[0] = 0.1f;
-		mLightDir[1] = -0.5f;
-		mLightDir[2] = 0.5f;
+		mLightDir[1] = -0.6f;
+		mLightDir[2] = 0.1f;
 		
 		mActors = new ArrayList<NDYActor>();
 		
@@ -54,7 +50,7 @@ public class NDYWorld {
 		mUI = new NDYUI();
 		mActors.add(mUI);
 		
-		// create the camera
+		// create the cameras
 		mCameraPerspective = new NDYCamera();
 		mCameraPerspective.setTarget(0f, 0f, 10.f);
 		mCameraPerspective.setPos(0f, 10f, -10f);
@@ -66,8 +62,11 @@ public class NDYWorld {
 		mActors.add(mCameraOrtho);
 		
 		// create the racer
-		mRacer = new NDYTransformable();
-		mRacer.setPos(0f, 0f, 0.f);
+		mRacer = new NDYActor();
+		// attach transformation component
+		NDYComponentTransformation transformationComponent = new NDYComponentTransformation();
+		transformationComponent.setPos(0f, 0f, 0.f);
+		mRacer.addComponent(transformationComponent);
 		// attach a mesh component
 		NDYComponentMesh meshComponent = new NDYComponentMeshSailboat("models/ship.3ds", "shaders/basic", null);		
 		mRacer.addComponent(meshComponent);
@@ -76,34 +75,35 @@ public class NDYWorld {
 		mRacer.addComponent(cineComponent);
 		mActors.add(mRacer);
 		
+		// make the camera follow the boat
 		NDYComponentFollow followComponent = new NDYComponentFollow(mRacer, 120f);
-		mCamera.addComponent(followComponent);
+		mCameraPerspective.addComponent(followComponent);
 		
-		/*
-		NDYTransformable plan = new NDYTransformable();
-		meshComponent = new NDYComponentMesh("models/plan.3ds", "shaders/basic_textured", "textures/sand_2.jpg");
-		plan.addComponent(meshComponent);
-		mActors.add(plan);
-		*/
-
-		NDYTransformable axis3D = new NDYTransformable();
-		axis3D.setScale(1000,1000,1000);
+		NDYActor axis3D = new NDYActor();
+		transformationComponent = new NDYComponentTransformation();
+		transformationComponent.setScale(1000,1000,1000);
+		axis3D.addComponent(transformationComponent);
 		NDYMesh mesh = NDYMesh.axis3d();
 		meshComponent = new NDYComponentMesh(mesh.toString(),"shaders/basic_colored",null);
 		axis3D.addComponent(meshComponent);
 		mActors.add(axis3D);
 		
-		NDYTransformable arrow = new NDYTransformable();
+		NDYActor arrow = new NDYActor();
+		transformationComponent = new NDYComponentTransformation();
+		arrow.addComponent(transformationComponent);
 		meshComponent = new NDYComponentMesh("models/arrow.3ds", "shaders/basic", null);
 		arrow.addComponent(meshComponent);
 		mActors.add(arrow);
-		arrow.setRot(0, mWindRot, 0);
+		transformationComponent.setRot(0, mWindRot, 0);
 		
-		NDYTransformable terrain = new NDYTransformable();
-		mesh = NDYMesh.plan(4, 4);
-		meshComponent = new NDYComponentMesh(mesh.toString(),"shaders/basic_textured","textures/sand_2.jpg");
+		NDYActor terrain = new NDYActor();
+		transformationComponent = new NDYComponentTransformation();
+		terrain.addComponent(transformationComponent);
+		mesh = NDYMesh.plan(10, 10);
+		meshComponent = new NDYComponentMesh(mesh.toString(),"shaders/water","textures/SkyDome-Cloud-Few-MidMorning.png");
 		terrain.addComponent(meshComponent);
-		terrain.setScale(100, 0, 100);
+		transformationComponent.setScale(1000, 0, 1000);
+		transformationComponent.setPos(-500, 0, -500);
 		mActors.add(terrain);
 	}
 	
@@ -143,7 +143,7 @@ public class NDYWorld {
 		return mCameraOrtho;
 	}
 	
-	public NDYTransformable getRacer() {
+	public NDYActor getRacer() {
 		return mRacer;
 	}
 	

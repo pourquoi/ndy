@@ -1,9 +1,9 @@
 package ndy.game.component;
 
+import ndy.game.NDYActor;
 import ndy.game.NDYGLSurfaceView;
 import ndy.game.NDYRessource;
 import ndy.game.NDYWorld;
-import ndy.game.actor.NDYTransformable;
 import ndy.game.math.Vector3;
 import ndy.game.mesh.NDYMesh;
 import ndy.game.mesh.NDYSubMesh;
@@ -68,7 +68,7 @@ public class NDYComponentGraph extends NDYComponent {
 	}
 	
 	public boolean processMessage(NDYMessage msg) {
-		NDYTransformable r = (NDYTransformable)mParent;
+		NDYActor r = mParent;
 		NDYWorld w = NDYWorld.current;
 		
 		if( msg.getClass() == NDYMessageUpdate.class ) {
@@ -83,7 +83,8 @@ public class NDYComponentGraph extends NDYComponent {
 			mNextVal = 0.f;
 		}
 		
-		if( msg.getClass() == NDYMessageRender.class ) {			
+		if( msg.getClass() == NDYMessageRender.class ) {
+			NDYComponentTransformation trans = (NDYComponentTransformation)r.findComponent("transformation");
 	        w.setCamera(w.getCameraOrtho());
 
 			NDYProgramBasic p = (NDYProgramBasic)mProgram;
@@ -94,9 +95,9 @@ public class NDYComponentGraph extends NDYComponent {
 	        p.setWorldAttribs();
 	        	        			
 			Matrix.setIdentityM(mMatrix, 0);
-			Vector3 pos = r.getPos();
+			Vector3 pos = trans.getPos();
 			Matrix.translateM(mMatrix, 0, pos.x, pos.y, pos.z);
-			Vector3 scale = r.getScale();
+			Vector3 scale = trans.getScale();
 			Matrix.scaleM(mMatrix, 0, scale.x, scale.y, 0);
 			
 			GLES20.glUniformMatrix4fv(p.mWorldMatrixHandle, 1, false, mMatrix, 0);
