@@ -7,6 +7,7 @@ import ndy.game.component.NDYComponentFollow;
 import ndy.game.component.NDYComponentMesh;
 import ndy.game.component.NDYComponentMeshSailboat;
 import ndy.game.component.NDYComponentTransformation;
+import ndy.game.component.NDYComponentWater;
 import ndy.game.mesh.NDYMesh;
 import ndy.game.message.NDYMessageRender;
 import ndy.game.message.NDYMessageUpdate;
@@ -99,10 +100,9 @@ public class NDYWorld {
 		NDYActor terrain = new NDYActor();
 		transformationComponent = new NDYComponentTransformation();
 		terrain.addComponent(transformationComponent);
-		mesh = NDYMesh.plan(10, 10);
-		meshComponent = new NDYComponentMesh(mesh.toString(),"shaders/water","textures/SkyDome-Cloud-Few-MidMorning.png");
-		terrain.addComponent(meshComponent);
-		transformationComponent.setScale(1000, 0, 1000);
+		NDYComponentWater water = new NDYComponentWater("shaders/water","textures/SkyDome-Cloud-Few-MidMorning.png");
+		terrain.addComponent(water);
+		transformationComponent.setScale(100, 1, 100);
 		transformationComponent.setPos(-500, 0, -500);
 		mActors.add(terrain);
 	}

@@ -1,5 +1,6 @@
 package ndy.game.component;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -26,6 +27,8 @@ public class NDYComponentMesh extends NDYComponent {
 	protected NDYMaterial mMaterial;
 	protected NDYProgram mProgram;
 	
+	protected ArrayList<NDYTexture> mTextures;
+	
 	protected float [] mMatrix = new float[16];
 	protected float [] mTranslationMatrix = new float[16];
 	
@@ -37,11 +40,7 @@ public class NDYComponentMesh extends NDYComponent {
 			mesh.loadFile();
 			NDYRessource.addRessource(mesh);
 		}
-		NDYProgram program = (NDYProgram)NDYRessource.getRessource(programName);
-		if( program == null ) {
-			program = NDYProgram.factory(programName);
-			NDYRessource.addRessource(program);
-		}
+		NDYProgram program = NDYProgram.factory(programName);
 		
 		NDYMaterial material = new NDYMaterial();
 		if( textureName != null ) {
@@ -82,17 +81,19 @@ public class NDYComponentMesh extends NDYComponent {
 	@Override
 	public boolean processMessage(NDYMessage msg) {
 		if( msg.getClass() == NDYMessageRender.class ) {
-			if( mMaterial.texture != null ) {
-				GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mMaterial.texture.getId());
-			}
-			
 	        GLES20.glUseProgram(mProgram.getId());
 	        NDYGLSurfaceView.checkGLError("glUseProgram");
 	        
 	        NDYProgramBasic p = (NDYProgramBasic)mProgram;
 	        
 	        p.setWorldAttribs();
+	        
+	        if( mMaterial.texture != null ) {
+				GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mMaterial.texture.getId());
+				if( p.mSamplerHandles[0] != -1 )
+					GLES20.glUniform1i(p.mSamplerHandles[0], 0);
+			}
 	        
 	        Iterator<Entry<String, NDYSubMesh>> it = mMesh.submeshes.entrySet().iterator();
 	        while(it.hasNext()) {
@@ -105,6 +106,22 @@ public class NDYComponentMesh extends NDYComponent {
 
 	        	NDYMaterial material = mMaterial;
 	        	if( submesh.material != null ) material = submesh.material;
+	        	
+	        	int tid = 1;
+	        	if( mTextures != null && mTextures.size() != 0 ) {
+					for(NDYTexture t:mTextures) {
+						if( p.mSamplerHandles[tid] != -1 ) {
+							GLES20.glActiveTexture(GLES20.GL_TEXTURE0+tid);
+							GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, t.getId());
+							GLES20.glUniform1i(p.mSamplerHandles[tid], tid);
+						}
+					}
+					tid++;
+				}
+	        	
+	        	if( tid > 1 && mMaterial.texture != null ) {
+	        		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+	        	}
 
 	        	submesh.vbuffer.position(submesh.posOffset);
 		        GLES20.glVertexAttribPointer(p.mPositionHandle, 3, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
@@ -194,5 +211,31 @@ public class NDYComponentMesh extends NDYComponent {
 	
 	public NDYProgram getProgram() {
 		return mProgram;
+	}
+	
+	public void addTexture(String name) {
+		if( mTextures == null ) {
+			mTextures = new ArrayList<NDYTexture>();
+		}
+
+		NDYTexture t = (NDYTexture)NDYRessource.getRessource(name);
+		if( t == null ) {
+			t = new NDYTexture(name);
+			NDYRessource.addRessource(t);
+		}
+		
+		mTextures.add(t);
+	}
+	
+	public void removeTexture(String name) {
+		if( mTextures != null ) {
+			NDYTexture tex = null;
+			for(NDYTexture t:mTextures) {
+				if(t.toString() == name) {
+					tex=t; break;
+				}
+			}
+			if( tex != null ) mTextures.remove(tex);
+		}
 	}
 }

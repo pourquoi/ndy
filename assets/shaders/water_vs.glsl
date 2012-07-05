@@ -20,12 +20,15 @@ uniform vec2 uWaveVector2;
 uniform vec4 uWaveParams3;
 uniform vec2 uWaveVector3;
 
+uniform float uDetailsDistance;
+
 attribute vec3 aPosition;
 attribute vec2 aTextureCoord;
 attribute vec3 aNormal;
 
 varying vec2 vTextureCoord;
 varying vec3 vPos;
+varying float vCamDist;
 
 const float PI = 3.14159265358979323846264;
 const float g = 9.8;
@@ -59,9 +62,11 @@ vec3 applywavepoint(in vec3 P0, in float t) {
 }
 
 void main() {
-	float t = uTime/1000.0;
+	float t = uTime;
 	vPos = vec3(uWorldMatrix * vec4(aPosition,1.0));
 	vec3 pos = applywavepoint(vPos,t);
+	
+	vCamDist = length(uEyePos - vPos);
 	
 	vTextureCoord = aTextureCoord;
 	gl_Position = (uProjectionMatrix*uViewMatrix) * vec4(pos,1.0);

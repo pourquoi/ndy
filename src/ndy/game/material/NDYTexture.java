@@ -5,12 +5,22 @@ import java.io.InputStream;
 
 import ndy.game.NDYRessource;
 import ndy.game.NDYWorld;
+import ndy.game.shader.NDYProgram;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 public class NDYTexture extends NDYRessource {
+	public static NDYTexture factory(String name) {
+		NDYTexture t = (NDYTexture)NDYRessource.getRessource(name);
+		if( t == null ) {
+			t = new NDYTexture(name);
+			NDYRessource.addRessource(t);
+		}
+		return t;
+	}
+	
 	public NDYTexture(String name) {
 		super(name);
 	}

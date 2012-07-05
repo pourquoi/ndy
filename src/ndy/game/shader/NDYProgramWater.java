@@ -10,6 +10,7 @@ public class NDYProgramWater extends NDYProgramBasic {
 	public int mWaveVector1Handle;
 	public int mWaveVector2Handle;
 	public int mWaveVector3Handle;
+	public int mDetailsDistanceHandle;
 
 	public NDYProgramWater(String name) {
 		super(name);
@@ -24,6 +25,7 @@ public class NDYProgramWater extends NDYProgramBasic {
 		mWaveVector2Handle = GLES20.glGetUniformLocation(mId, "uWaveVector2");
 		mWaveParams3Handle = GLES20.glGetUniformLocation(mId, "uWaveParams3");
 		mWaveVector3Handle = GLES20.glGetUniformLocation(mId, "uWaveVector3");
+		mDetailsDistanceHandle = GLES20.glGetUniformLocation(mId, "uDetailsDistance");
 	}
 	
 	public void setWorldAttribs() {
@@ -38,5 +40,7 @@ public class NDYProgramWater extends NDYProgramBasic {
 		
 		GLES20.glUniform4f(mWaveParams3Handle, 0.1f, 0.f, 5.f, 0.7f);
 		GLES20.glUniform2f(mWaveVector3Handle, 0.5f, 0.5f);
+		
+		GLES20.glUniform1f(mDetailsDistanceHandle, 300.f);
 	}
 }

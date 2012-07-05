@@ -1,5 +1,5 @@
 precision mediump float;
-uniform sampler2D sTexture;
+uniform sampler2D sTexture0;
 
 uniform mat4 uWorldMatrix;
 uniform mat4 uViewMatrix;
@@ -22,8 +22,11 @@ uniform vec2 uWaveVector2;
 uniform vec4 uWaveParams3;
 uniform vec2 uWaveVector3;
 
+uniform float uDetailsDistance;
+
 varying vec2 vTextureCoord;
 varying vec3 vPos;
+varying float vCamDist;
 
 const float PI = 3.14159265358979323846264;
 const float g = 9.8;
@@ -57,8 +60,12 @@ vec3 applywavenormal(in vec3 P0, in float t) {
 }
 
 void main() {
-	float t = uTime/1000.0;
-	vec3 N = -applywavenormal(vPos,t);
+	vec3 N;
+	if(vCamDist<uDetailsDistance) {
+		N = -applywavenormal(vPos,uTime);
+	} else {
+		N = vec3(0.0, -1.0, 0.0);
+	}
 	vec3 L = normalize(uLightDir);
 	vec3 R = normalize(reflect(L,N));
 	vec3 D = normalize(uEyePos - vPos);
@@ -71,6 +78,8 @@ void main() {
 	vec2 uv;
 	uv.x=RV.x/m+0.5;
 	uv.y=RV.y/m+0.5;
+	
+	//float h = texture2D(sTexture1, vec2((vPos.x+500.0)/1000.0,(vPos.z+500.0)/1000.0)).r;
 
-	gl_FragColor = texture2D(sTexture, uv) * color;
+	gl_FragColor = texture2D(sTexture0, uv) * color;
 }

@@ -83,6 +83,10 @@ public class NDYRessource {
 		return mId;
 	}
 	
+	public String getName() {
+		return mName;
+	}
+	
 	@Override
 	public String toString() {
 		return mName;

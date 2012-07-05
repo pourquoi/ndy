@@ -9,11 +9,15 @@ import android.opengl.GLES20;
 public class NDYProgramBasic extends NDYProgram {
 	private static String TAG = "NDYProgramBasic";
 	
+	public static int MAX_TEXTURES = 4;
+	
 	public int mTimeHandle;
 	
 	public int mTextureHandle;
 	public int mNormalHandle;
 	public int mColorHandle;
+	
+	public int [] mSamplerHandles;
 
 	public int mWorldMatrixHandle;
 	public int mViewMatrixHandle;
@@ -59,6 +63,12 @@ public class NDYProgramBasic extends NDYProgram {
         	throw new RuntimeException("Could not get attrib location for uProjectionMatrix");
         }
         
+        mSamplerHandles = new int[MAX_TEXTURES];
+        
+        for(int i=0;i<MAX_TEXTURES;i++) {
+        	mSamplerHandles[i] = GLES20.glGetAttribLocation(mId, "sTexture"+i);
+        }
+        
         mColorHandle = GLES20.glGetAttribLocation(mId, "aColor");
         
         mTextureHandle = GLES20.glGetAttribLocation(mId, "aTextureCoord");
@@ -84,8 +94,9 @@ public class NDYProgramBasic extends NDYProgram {
 		 NDYWorld w = NDYWorld.current;
 		 
 		 if( mTimeHandle != -1 ) {
-	        GLES20.glUniform1f(mTimeHandle, w.getTime());
-	        NDYGLSurfaceView.checkGLError("glUniform1i time");
+			float t = w.getTime() / 1000.f;
+	        GLES20.glUniform1f(mTimeHandle, t);
+	        NDYGLSurfaceView.checkGLError("glUniform1f time");
         }
 
         NDYCamera c = w.getCamera();

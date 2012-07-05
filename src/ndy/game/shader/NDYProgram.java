@@ -14,11 +14,16 @@ public class NDYProgram extends NDYRessource {
 	public int mPositionHandle;
 	
 	public static NDYProgram factory(String programName) {
-		if(programName.contains("water")) {
-			return new NDYProgramWater(programName);
-		} else {
-			return new NDYProgramBasic(programName);
+		NDYProgram p = (NDYProgram)NDYRessource.getRessource(programName);
+		if( p == null ) {
+			if(programName.contains("water")) {
+				p = new NDYProgramWater(programName);
+			} else {
+				p = new NDYProgramBasic(programName);
+			}
+			NDYRessource.addRessource(p);
 		}
+		return p;
 	}
 	
 	public NDYProgram(String name) {
