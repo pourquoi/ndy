@@ -3,15 +3,17 @@ package ndy.game.material;
 import java.io.IOException;
 import java.io.InputStream;
 
-import ndy.game.NDYRessource;
-import ndy.game.NDYWorld;
-import ndy.game.shader.NDYProgram;
+import ndy.game.actor.NDYGame;
+import ndy.game.component.NDYRessource;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 public class NDYTexture extends NDYRessource {
+	private static final String TAG = "NDYTexture";
+
 	public static NDYTexture factory(String name) {
 		NDYTexture t = (NDYTexture)NDYRessource.getRessource(name);
 		if( t == null ) {
@@ -50,8 +52,9 @@ public class NDYTexture extends NDYRessource {
         InputStream is = null;
         
 		try {
-			is = NDYWorld.current.getContext().getAssets().open(mName);
+			is = NDYGame.instance.mContext.getAssets().open(mName);
 		} catch (IOException e) {
+			Log.e(TAG, "Could not open " + mName);
 		} finally {
 	        Bitmap bitmap;
 	        try {
@@ -60,6 +63,7 @@ public class NDYTexture extends NDYRessource {
 	            try {
 	                is.close();
 	            } catch(IOException e) {
+	            	Log.e(TAG, "Could not close " + mName);
 	            }
 	        }
 	

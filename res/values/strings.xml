@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="hello">Hello World, NdyActivity!</string>
-    <string name="app_name">Ndy</string>
-
+    <string name="app_name">Sailing on world\'s lakes</string>
+    <string name="lake_mazury_name">Mazury, Poland</string>
+    <string name="lake_mazury_desc">
+	Masuria (Polish: Mazury) is a natural region in northeastern Poland famous for its 2,000 lakes. 
+	Geographically, Masuria is part of two adjacent lakeland districts, the Masurian Lake District (Polish: Pojezierze Mazurskie) and the Iława Lake District (Pojezierze Iławskie). 
+	Administratively, it belongs to the Warmian-Masurian Voivodeship (Polish: Województwo warmińsko-mazurskie).
+	The landscape of the region was formed by the last ice age around 14,000 - 15,000 years ago in Pleistocene. 
+	The terrain is mostly hilly, with connecting lakes, rivers and streams. Forests account for about 30% of the area.
+	The northern part of Masuria is covered mostly by the broadleaved forest, while the southern part is dominated by pine and mixed forests.
+	The region\'s economy relies largely on eco-tourism and agriculture. The lakes for which the region is best known offer varieties of water sports, recreation and vacation activities.
+	</string>
 </resources>

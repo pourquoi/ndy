@@ -1,61 +1,44 @@
 package ndy.game.component;
 
-import ndy.game.math.Quaternion;
-import ndy.game.math.Vector3;
+import ndy.game.math.NDYQuaternion;
+import ndy.game.math.NDYVector3;
 import ndy.game.message.NDYMessage;
 import ndy.game.message.NDYMessageUpdate;
 
 public class NDYComponentTransformation extends NDYComponent {
-	protected Vector3 mPos = new Vector3();
-	protected Vector3 mRot = new Vector3();
-	protected Vector3 mScale = new Vector3(1,1,1);
+	public NDYVector3 pos = new NDYVector3();
+	public NDYVector3 rot = new NDYVector3();
+	public NDYVector3 scale = new NDYVector3(1, 1, 1);
 
-	protected Quaternion mRotQ = new Quaternion();
-	
+	public NDYQuaternion rotQ = new NDYQuaternion();
+
 	public NDYComponentTransformation() {
 		super("transformation");
 	}
-	
+
 	public boolean processMessage(NDYMessage msg) {
-		if( msg.getClass() == NDYMessageUpdate.class ) {
-			mRotQ.fromEuler(mRot.y, mRot.z, mRot.x);
+		if (msg.getClass() == NDYMessageUpdate.class) {
+			rotQ.fromEuler(rot.y, rot.z, rot.x);
 		}
 
 		return false;
 	}
-	
-	public Vector3 getPos() {
-		return mPos;
-	}
-	
+
 	public void setPos(float x, float y, float z) {
-		mPos.x = x;
-		mPos.y = y;
-		mPos.z = z;
-	}
-	
-	public Vector3 getRot() {
-		return mRot;
-	}
-	
-	public void setRot(float x, float y, float z) {
-		mRot.x = x;
-		mRot.y = y;
-		mRot.z = z;
-	}
-	
-	public Vector3 getScale() {
-		return mScale;
-	}
-	
-	public void setScale(float x, float y, float z) {
-		mScale.x = x;
-		mScale.y = y;
-		mScale.z = z;
-	}
-	
-	public Quaternion getRotQ() {
-		return mRotQ;
+		pos.x = x;
+		pos.y = y;
+		pos.z = z;
 	}
 
+	public void setRot(float x, float y, float z) {
+		rot.x = x;
+		rot.y = y;
+		rot.z = z;
+	}
+
+	public void setScale(float x, float y, float z) {
+		scale.x = x;
+		scale.y = y;
+		scale.z = z;
+	}
 }

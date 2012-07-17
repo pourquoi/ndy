@@ -1,5 +1,6 @@
 package ndy.game;
 
+import ndy.game.actor.NDYGame;
 import ndy.game.math.NDYMath;
 import android.content.Context;
 import android.opengl.GLES20;
@@ -12,7 +13,6 @@ import android.view.MotionEvent;
 public class NDYGLSurfaceView extends GLSurfaceView {
 	private static String TAG = "NDYGLSurfaceView";
 	private float lastTouchX, lastTouchY;
-	private NDYInput mInput = new NDYInput();
 	private long mLastMoveTime = 0;
 	private NDYRenderer mRenderer;
 
@@ -53,20 +53,19 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 		this.queueEvent(new Runnable() {
 			@Override
 			public void run() {
+				NDYInput input = NDYGame.instance.mInput;
 				switch (action) {
 				case MotionEvent.ACTION_UP:
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
-					Log.d(TAG, "up ("+lastTouchX+","+lastTouchY+")");
 
-					mInput.up(lastTouchX, lastTouchY);
+					input.up(lastTouchX, lastTouchY);
 					break;
 				case MotionEvent.ACTION_DOWN:
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
-					Log.d(TAG, "down ("+lastTouchX+","+lastTouchY+")");
 					
-					mInput.down(lastTouchX, lastTouchY);
+					input.down(lastTouchX, lastTouchY);
 					break;
 				case MotionEvent.ACTION_MOVE:
 					float dx = NDYMath.clamp(event.getX() - lastTouchX, -3.f, 3.f);
@@ -74,7 +73,7 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
 
-					mInput.move(dx, dy);					
+					input.move(dx, dy);					
 					break;
 				default:
 				}

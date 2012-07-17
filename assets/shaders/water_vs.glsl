@@ -1,73 +1,56 @@
+#define NUM_WAVES 3
+
 precision mediump float;
+
 uniform mat4 uWorldMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uProjectionMatrix;
 
-uniform vec3 uLightDir;
-uniform vec3 uEyePos;
-
-uniform vec4 uAmbient;
-uniform vec4 uDiffuse;
-uniform vec4 uSpecular;
-uniform float uShininess;
-
 uniform float uTime;
 
-uniform vec4 uWaveParams1; // amplitude, phase, wavelength, sharpness
-uniform vec2 uWaveVector1;
-uniform vec4 uWaveParams2;
-uniform vec2 uWaveVector2;
-uniform vec4 uWaveParams3;
-uniform vec2 uWaveVector3;
+uniform float uWaveAmplitude[NUM_WAVES];
+uniform float uWavePhase[NUM_WAVES];
+uniform float uWaveLength[NUM_WAVES];
+uniform float uWaveSharpness[NUM_WAVES];
+uniform vec2 uWaveVector[NUM_WAVES];
+uniform vec4 uWaveConst[NUM_WAVES]; // sqrt(2PIg/L), 2PI/L, Dirx*A, Diry*A
 
-uniform float uDetailsDistance;
+uniform vec2 uWaterSize;
+uniform vec2 uWaterPos;
+
+uniform float detailDist2;
 
 attribute vec3 aPosition;
 attribute vec2 aTextureCoord;
 attribute vec3 aNormal;
 
 varying vec2 vTextureCoord;
+varying vec2 vHeightmapCoord;
 varying vec3 vPos;
-varying float vCamDist;
 
 const float PI = 3.14159265358979323846264;
-const float g = 9.8;
 
 vec3 applywavepoint(in vec3 P0, in float t) {
-	vec2 K1 = normalize(uWaveVector1);
-	vec2 K2 = normalize(uWaveVector2);
-	vec2 K3 = normalize(uWaveVector3);
-	
-	float w1 = sqrt(2.0*PI*g/uWaveParams1.z);
-	float w2 = sqrt(2.0*PI*g/uWaveParams2.z);
-	float w3 = sqrt(2.0*PI*g/uWaveParams3.z);
-	
-	float K1dotP = dot(uWaveVector1,P0.xz);
-	float K2dotP = dot(uWaveVector2,P0.xz);
-	float K3dotP = dot(uWaveVector3,P0.xz);
-	
-	vec3 P;
-	
-	P.xz = P0.xz + ( 
-	uWaveParams1.w*K1*uWaveParams1.x*cos(K1dotP - w1*t + uWaveParams1.y) +
-	uWaveParams2.w*K2*uWaveParams2.x*cos(K2dotP - w2*t + uWaveParams2.y) +
-	uWaveParams3.w*K3*uWaveParams3.x*cos(K3dotP - w3*t + uWaveParams3.y) );
-	
-	P.y = P0.y + (
-	uWaveParams1.x*sin(K1dotP-w1*t+uWaveParams1.y) +
-	uWaveParams2.x*sin(K2dotP-w2*t+uWaveParams2.y) +
-	uWaveParams3.x*sin(K3dotP-w3*t+uWaveParams3.y) );
-	
+	vec3 P = P0;
+	int i;
+	float KdotP;
+	float a;
+	for(i=0;i<NUM_WAVES;i++) {
+		KdotP = dot(uWaveVector[i]*uWaveConst[i].y,P0.xz);
+		float a = KdotP - uWaveConst[i].x * t + uWavePhase[i];
+		P.x += uWaveConst[i].z * uWaveSharpness[i] * cos(a);
+		P.z += uWaveConst[i].w * uWaveSharpness[i] * cos(a);
+		P.y += uWaveAmplitude[i] * sin(a);
+	}
 	return P;
 }
 
 void main() {
-	float t = uTime;
 	vPos = vec3(uWorldMatrix * vec4(aPosition,1.0));
-	vec3 pos = applywavepoint(vPos,t);
 	
-	vCamDist = length(uEyePos - vPos);
-	
+	vec3 pos = vPos;// applywavepoint(vPos,uTime);
 	vTextureCoord = aTextureCoord;
+	vHeightmapCoord = vec2((vPos.x-uWaterPos.x)/uWaterSize.x,1.0-(vPos.z-uWaterPos.y)/uWaterSize.y);
+	
 	gl_Position = (uProjectionMatrix*uViewMatrix) * vec4(pos,1.0);
 }

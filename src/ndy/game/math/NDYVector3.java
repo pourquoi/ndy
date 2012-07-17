@@ -2,26 +2,26 @@ package ndy.game.math;
 
 import android.util.FloatMath;
 
-public class Vector3 {
+public class NDYVector3 {
 	public float x, y, z;
 	
-	public Vector3() {
+	public NDYVector3() {
 		x = y = z = 0f;
 	}
 	
-	public Vector3(float x, float y, float z) {
+	public NDYVector3(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 	
-	public Vector3(Vector3 v) {
+	public NDYVector3(NDYVector3 v) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
 	}
 	
-	public Vector3 normalize() {
+	public NDYVector3 normalize() {
 		float d = FloatMath.sqrt(x*x + y*y + z*z);
 		if(d!=0.f) {
 		x /= d;
@@ -40,12 +40,12 @@ public class Vector3 {
 		return x*x + y*y + z*z;
 	}
 	
-	public float distance(Vector3 v) {
-		Vector3 v2 = new Vector3(this);
+	public float distance(NDYVector3 v) {
+		NDYVector3 v2 = new NDYVector3(this);
 		return v2.substract(v).length();
 	}
 	
-	public Vector3 add(Vector3 v) {
+	public NDYVector3 add(NDYVector3 v) {
 		x += v.x;
 		y += v.y;
 		z += v.z;
@@ -53,7 +53,7 @@ public class Vector3 {
 		return this;
 	}
 	
-	public Vector3 substract(Vector3 v) {
+	public NDYVector3 substract(NDYVector3 v) {
 		x -= v.x;
 		y -= v.y;
 		z -= v.z;
@@ -61,7 +61,7 @@ public class Vector3 {
 		return this;
 	}
 	
-	public Vector3 scale(float s) {
+	public NDYVector3 scale(float s) {
 		x *= s;
 		y *= s;
 		z *= s;
@@ -73,15 +73,13 @@ public class Vector3 {
 		return "["+x+","+y+","+z+"]";
 	}
 	
-	public static float dotProduct(Vector3 a, Vector3 b) {
+	public static float dotProduct(NDYVector3 a, NDYVector3 b) {
 		return a.x*b.x+a.y*b.y+a.z*b.z;
 	}
 	
-	public static Vector3 crossProduct(Vector3 a, Vector3 b) {
-		Vector3 v = new Vector3();
-		v.x = a.y * b.z - a.z * b.y;
-		v.y = a.z * b.x - a.x * b.z;
-		v.z = a.x * b.y - a.y * b.x;
-		return v;
+	public static void crossProduct(NDYVector3 a, NDYVector3 b, NDYVector3 r) {
+		r.x = a.y * b.z - a.z * b.y;
+		r.y = a.z * b.x - a.x * b.z;
+		r.z = a.x * b.y - a.y * b.x;
 	}
 }

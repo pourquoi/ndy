@@ -13,15 +13,15 @@ attribute vec3 aNormal;
 varying vec4 vColor;
 varying vec3 vPos;
 void main() {
-  float t = uTime;
-  vec3 dpos = aPosition;
-  mat4 wvp = (uProjectionMatrix*uViewMatrix)*uWorldMatrix;
-  vPos = vec3(uWorldMatrix * vec4(dpos,1.0));  
-  vec3 N = normalize(mat3(uWorldMatrix) * aNormal);
-  vec3 L = normalize(uLightDir);
-  vec3 R = normalize(reflect(L,N));
-  vec3 D = normalize(uEyePos - vPos);
-  vColor = uAmbient + dot(N,L) * uDiffuse + pow(clamp(dot(R,D),0.0,1.0),uShininess) * uSpecular;
-  vColor.a = 1.0;
-  gl_Position = wvp * vec4(dpos,1.0);
+	float t = uTime;
+	vec3 dpos = aPosition;
+	mat4 wvp = (uProjectionMatrix*uViewMatrix)*uWorldMatrix;
+	vPos = vec3(uWorldMatrix * vec4(dpos,1.0));  
+	vec3 N = normalize(mat3(uWorldMatrix) * aNormal);
+	vec3 L = (uLightDir);
+	vec3 R = normalize(reflect(L,N));
+	vec3 D = normalize(uEyePos - vPos);
+	vColor = uAmbient + abs(dot(N,-L)) * uDiffuse + pow(clamp(dot(R,D),0.0,1.0),uShininess) * uSpecular;
+	vColor.a = 1.0;
+	gl_Position = wvp * vec4(dpos,1.0);
 }

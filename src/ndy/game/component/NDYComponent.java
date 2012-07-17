@@ -1,7 +1,9 @@
 package ndy.game.component;
 
-import ndy.game.NDYActor;
+import ndy.game.actor.NDYActor;
 import ndy.game.message.NDYMessage;
+
+import org.xmlpull.v1.XmlPullParser;
 
 
 public class NDYComponent {
@@ -26,5 +28,9 @@ public class NDYComponent {
 	
 	public String getName() {
 		return mName;
+	}
+	
+	public void load(XmlPullParser xpp) {
+		
 	}
 }

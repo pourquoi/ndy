@@ -1,20 +1,20 @@
 package ndy.game.mesh;
 
-import ndy.game.math.Quaternion;
+import ndy.game.math.NDYQuaternion;
 
 public class NDYAnimation {
 	private String mName;
-	private Quaternion [] mTransforms;
+	private NDYQuaternion [] mTransforms;
 	private float [] mTimes;
 	private boolean mLoop = true;
 	
-	public NDYAnimation(String name, Quaternion [] transforms, float [] times) {
+	public NDYAnimation(String name, NDYQuaternion [] transforms, float [] times) {
 		mName = name;
 		mTransforms = transforms;
 		mTimes = times;
 	}
 	
-	public void computeTransform(Quaternion q, float t) {
+	public void computeTransform(NDYQuaternion q, float t) {
 		int ta=0, tb=mTimes.length-1;
 		float mint=mTimes[ta],maxt=mTimes[tb];
 		
@@ -32,8 +32,8 @@ public class NDYAnimation {
 		computeTransform(q, ta, tb, (t-mint)/(maxt-mint));
 	}
 	
-	public void computeTransform(Quaternion q, int ta, int tb, float t) {
-		Quaternion.slerp(q, mTransforms[ta], mTransforms[tb], t);
+	public void computeTransform(NDYQuaternion q, int ta, int tb, float t) {
+		NDYQuaternion.slerp(q, mTransforms[ta], mTransforms[tb], t);
 	}
 	
 	public String getName() {
