@@ -6,6 +6,7 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 import ndy.game.material.NDYMaterial;
+import ndy.game.math.NDYBox;
 import android.opengl.GLES20;
 
 public class NDYSubMesh {
@@ -27,6 +28,8 @@ public class NDYSubMesh {
 	public int normalOffset = 3;
 	public int colorOffset = 3;
 	public int texcoordsOffset;
+	
+	public NDYBox bbox;
 
 	public NDYMaterial material;
 

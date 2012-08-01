@@ -6,9 +6,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
+import ndy.game.NDYGLSurfaceView;
 import ndy.game.actor.NDYGame;
 import ndy.game.component.NDYRessource;
+import ndy.game.math.NDYBox;
 import ndy.game.math.NDYVector3;
 import android.opengl.GLES20;
 import android.util.Log;
@@ -56,13 +60,22 @@ public class NDYMesh extends NDYRessource {
 		if (!super.load())
 			return false;
 
-		/*
-		 * broken on 2.2 Iterator<Entry<String, NDYSubMesh>> it = submeshes.entrySet() .iterator(); NDYSubMesh sm = null; int[] buffers = new int[1]; while
-		 * (it.hasNext()) { sm = (NDYSubMesh) it.next().getValue(); GLES20.glGenBuffers(1, buffers, 0); NDYGLSurfaceView.checkGLError("glGenBuffers " +
-		 * sm.name); GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]); NDYGLSurfaceView.checkGLError("glBindBuffer " + sm.name);
-		 * GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, sm.vbuffer.capacity() NDYMesh.FLOAT_SIZE_BYTES, sm.vbuffer, GLES20.GL_STATIC_DRAW);
-		 * NDYGLSurfaceView.checkGLError("glBufferData " + sm.name); sm.vbo = buffers[0]; }
-		 */
+		Iterator<Entry<String, NDYSubMesh>> it = submeshes.entrySet().iterator();
+		NDYSubMesh sm = null;
+		int[] buffers = new int[1];
+		while (it.hasNext()) {
+			sm = (NDYSubMesh) it.next().getValue();
+			GLES20.glGenBuffers(1, buffers, 0);
+			NDYGLSurfaceView.checkGLError("glGenBuffers " + sm.name);
+			
+			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
+			NDYGLSurfaceView.checkGLError("glBindBuffer " + sm.name);
+			
+			GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, sm.vbuffer.capacity() * NDYMesh.FLOAT_SIZE_BYTES, sm.vbuffer, GLES20.GL_STATIC_DRAW);
+			NDYGLSurfaceView.checkGLError("glBufferData " + sm.name);
+			
+			sm.vbo = buffers[0];
+		}
 
 		mId = 0;
 		return true;
@@ -228,6 +241,8 @@ class NDYMeshLoader {
 	private String name = new String();
 	private ArrayList<LoaderFace> faces = new ArrayList<LoaderFace>();
 	private ArrayList<LoaderVertex> vertices = new ArrayList<LoaderVertex>();
+	NDYVector3 min = null;
+	NDYVector3 max = null;
 	private boolean hasTexCoords = false;
 
 	public void load(NDYMesh mesh) throws Exception {
@@ -257,6 +272,8 @@ class NDYMeshLoader {
 					faces.clear();
 					vertices.clear();
 					name = new String();
+					min = null;
+					max = null;
 					byte c;
 					while ((c = in.readByte()) != 0) {
 						name += (char) c;
@@ -278,6 +295,23 @@ class NDYMeshLoader {
 						v.z = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getFloat();
 						in.read(buffer);
 						v.y = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+						if (min == null || max == null) {
+							min = new NDYVector3(v.x, v.y, v.z);
+							max = new NDYVector3(v.x, v.y, v.z);
+						} else {
+							if (v.x < min.x)
+								min.x = v.x;
+							if (v.x > max.x)
+								max.x = v.x;
+							if (v.y < min.y)
+								min.y = v.y;
+							if (v.y > max.y)
+								max.y = v.y;
+							if (v.z < min.z)
+								min.z = v.z;
+							if (v.z > max.z)
+								max.z = v.z;
+						}
 
 						vertices.add(v);
 					}
@@ -356,6 +390,8 @@ class NDYMeshLoader {
 	private void addSubMesh(NDYMesh mesh) {
 		NDYSubMesh submesh = new NDYSubMesh();
 		submesh.name = name;
+
+		submesh.bbox = new NDYBox(min, max.substract(min));
 
 		int vsize = 6;
 		if (hasTexCoords) {

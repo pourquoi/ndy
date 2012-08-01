@@ -23,6 +23,14 @@ public class NDYRenderer implements GLSurfaceView.Renderer {
 	public NDYRenderer() {
 		mCurrentTime = SystemClock.uptimeMillis();
 	}
+	
+	static
+	{
+	    System.loadLibrary("fix-GLES20");
+	}
+
+	native public static void glVertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int offset);
+	native public static void glDrawElements(int mode, int count, int type, int offset);
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -74,7 +82,6 @@ public class NDYRenderer implements GLSurfaceView.Renderer {
 			mAccumulator -= mTimeStep;
 		}
 
-		// NDYGame.instance.update(frameTime);
 		mCurrentTime = newTime;
 
 		GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);

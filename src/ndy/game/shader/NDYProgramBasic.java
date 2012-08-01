@@ -1,6 +1,7 @@
 package ndy.game.shader;
 
 import ndy.game.NDYGLSurfaceView;
+import ndy.game.NDYRenderer;
 import ndy.game.actor.NDYActor;
 import ndy.game.actor.NDYCamera;
 import ndy.game.actor.NDYGame;
@@ -149,7 +150,7 @@ public class NDYProgramBasic extends NDYProgram {
 					}
 
 					if (mShininessHandle != -1) {
-						GLES20.glUniform1f(mShininessHandle, (float)material.shininess);
+						GLES20.glUniform1f(mShininessHandle, (float) material.shininess);
 						NDYGLSurfaceView.checkGLError("glUniform1f shininess");
 					}
 				}
@@ -164,18 +165,29 @@ public class NDYProgramBasic extends NDYProgram {
 			}
 		}
 	}
-	
+
 	public void sendSubmesh(NDYSubMesh submesh) {
 		submesh.vbuffer.position(submesh.posOffset);
-		GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
+
+		if (submesh.vbo != -1)
+			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, submesh.vbo);
+
+		if (submesh.vbo != -1)
+			NDYRenderer.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, submesh.vsize, 0);
+		else
+			GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
 		NDYGLSurfaceView.checkGLError("glVertexAttribPointer maPosition");
 		GLES20.glEnableVertexAttribArray(mPositionHandle);
 		NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray maPositionHandle");
 
 		if (submesh.getDesc() == NDYSubMesh.VERTEX_DESC_POSITION_TEXCOORDS || submesh.getDesc() == NDYSubMesh.VERTEX_DESC_POSITION_NORMAL_TEXCOORDS) {
 			if (mTextureHandle != -1) {
-				submesh.vbuffer.position(submesh.texcoordsOffset);
-				GLES20.glVertexAttribPointer(mTextureHandle, 2, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
+				if (submesh.vbo != -1) {
+					NDYRenderer.glVertexAttribPointer(mTextureHandle, 2, GLES20.GL_FLOAT, false, submesh.vsize, submesh.texcoordsOffset);
+				} else {
+					submesh.vbuffer.position(submesh.texcoordsOffset);
+					GLES20.glVertexAttribPointer(mTextureHandle, 2, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
+				}
 				NDYGLSurfaceView.checkGLError("glVertexAttribPointer maTextureHandle");
 				GLES20.glEnableVertexAttribArray(mTextureHandle);
 				NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray maTextureHandle");
@@ -184,8 +196,12 @@ public class NDYProgramBasic extends NDYProgram {
 
 		if (submesh.getDesc() == NDYSubMesh.VERTEX_DESC_POSITION_NORMAL || submesh.getDesc() == NDYSubMesh.VERTEX_DESC_POSITION_NORMAL_TEXCOORDS) {
 			if (mNormalHandle != -1) {
-				submesh.vbuffer.position(submesh.normalOffset);
-				GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
+				if (submesh.vbo != -1) {
+					NDYRenderer.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, false, submesh.vsize, submesh.normalOffset);
+				} else {
+					submesh.vbuffer.position(submesh.normalOffset);
+					GLES20.glVertexAttribPointer(mNormalHandle, 3, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
+				}
 				GLES20.glEnableVertexAttribArray(mNormalHandle);
 				NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray mNormalHandle");
 			}
@@ -193,13 +209,17 @@ public class NDYProgramBasic extends NDYProgram {
 
 		if (submesh.getDesc() == NDYSubMesh.VERTEX_DESC_POSITION_COLOR) {
 			if (mColorHandle != -1) {
-				submesh.vbuffer.position(submesh.colorOffset);
-				GLES20.glVertexAttribPointer(mColorHandle, 4, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
+				if (submesh.vbo != 1) {
+					NDYRenderer.glVertexAttribPointer(mColorHandle, 4, GLES20.GL_FLOAT, false, submesh.vsize, submesh.colorOffset);
+				} else {
+					submesh.vbuffer.position(submesh.colorOffset);
+					GLES20.glVertexAttribPointer(mColorHandle, 4, GLES20.GL_FLOAT, false, submesh.vsize, submesh.vbuffer);
+				}
 				GLES20.glEnableVertexAttribArray(mColorHandle);
 				NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray mColorHandle");
 			}
 		}
-		
+
 		if (submesh.material != null) {
 			if (mAmbientHandle != -1) {
 				GLES20.glUniform4fv(mAmbientHandle, 1, submesh.material.ambient, 0);
@@ -217,7 +237,7 @@ public class NDYProgramBasic extends NDYProgram {
 			}
 
 			if (mShininessHandle != -1) {
-				GLES20.glUniform1f(mShininessHandle, (float)submesh.material.shininess);
+				GLES20.glUniform1f(mShininessHandle, (float) submesh.material.shininess);
 				NDYGLSurfaceView.checkGLError("glUniform1f shininess");
 			}
 		}

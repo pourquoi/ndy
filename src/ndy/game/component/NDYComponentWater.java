@@ -2,16 +2,10 @@ package ndy.game.component;
 
 import java.util.Random;
 
-import org.xmlpull.v1.XmlPullParser;
-
 import ndy.game.NDYGLSurfaceView;
-import ndy.game.NDYLakeMap;
 import ndy.game.actor.NDYActor;
 import ndy.game.actor.NDYCamera;
 import ndy.game.actor.NDYGame;
-import ndy.game.material.NDYMaterial;
-import ndy.game.material.NDYTexture;
-import ndy.game.material.NDYTextureWaterNormals;
 import ndy.game.material.NDYWaterDesc;
 import ndy.game.math.NDYMath;
 import ndy.game.math.NDYVector3;
@@ -22,40 +16,38 @@ import ndy.game.message.NDYMessageRender;
 import ndy.game.message.NDYMessageUpdate;
 import ndy.game.shader.NDYProgram;
 import ndy.game.shader.NDYProgramWater;
+
+import org.xmlpull.v1.XmlPullParser;
+
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.FloatMath;
 
 public class NDYComponentWater extends NDYComponent {
-	protected NDYMesh[] meshes;
-	protected NDYProgram program;
-	protected NDYWaterDesc water;
-	protected NDYLakeMap lake;
-	protected int numWaves;
-	protected float wavelength;
+	public NDYMesh[] meshes;
+	public NDYProgram program;
+	public NDYWaterDesc water;
+	public int numWaves;
+	public float wavelength;
 
-	protected float [] modelMatrix = new float[16];
+	public float[] modelMatrix = new float[16];
 
-	public NDYComponentWater(
-			NDYProgram program,
-			NDYLakeMap lake,
-			float wavelength) {
+	public NDYComponentWater(NDYProgram program, float wavelength) {
 		super("water");
 		this.program = program;
-		this.lake = lake;
 		this.wavelength = wavelength;
-		
+
 		genWaterFeatures();
-		
+
 		genMeshes();
 	}
-	
+
 	public void genMeshes() {
 		meshes = new NDYMesh[2];
 		meshes[0] = NDYMesh.plan(1, 1);
 		meshes[1] = NDYMesh.plan(1, 1);
 	}
-	
+
 	public void genWaterFeatures() {
 		numWaves = 3;
 
@@ -68,8 +60,7 @@ public class NDYComponentWater extends NDYComponent {
 		float wa = NDYGame.instance.mWeather.mWindRot;
 
 		for (int i = 0; i < numWaves; i++) {
-			water.wavelength[i] = wavelength + rnd.nextFloat()
-					* wavelength;
+			water.wavelength[i] = wavelength + rnd.nextFloat() * wavelength;
 			water.phases[i] = rnd.nextFloat() * NDYMath.TWOPI;
 			water.sharpness[i] = rnd.nextFloat();
 			water.amplitude[i] = water.wavelength[i] * 0.03f;
@@ -80,11 +71,11 @@ public class NDYComponentWater extends NDYComponent {
 			water.calcConst();
 		}
 	}
-	
+
 	public void load(XmlPullParser xpp) {
-		
+
 	}
-	
+
 	public void renderPatch(NDYProgramWater p, NDYSubMesh submesh, float x, float z, float w, float h) {
 		Matrix.setIdentityM(modelMatrix, 0);
 		Matrix.translateM(modelMatrix, 0, x, 0.f, z);
@@ -127,7 +118,7 @@ public class NDYComponentWater extends NDYComponent {
 			GLES20.glUniform2fv(p.mWaveVectorHandle, numWaves, water.wavedir, 0);
 			GLES20.glUniform2f(p.mWaterSize, trans.scale.x, trans.scale.z);
 			GLES20.glUniform2f(p.mWaterPos, trans.pos.x, trans.pos.z);
-			
+
 			renderPatch(p, submesh_high, trans.pos.x, trans.pos.z, trans.scale.x, trans.scale.z);
 		}
 

@@ -32,7 +32,7 @@ public class NDYComponentMeshSailboat extends NDYComponentMesh {
 	@Override
 	protected void computeModelMatrix(NDYSubMesh submesh) {
 		NDYComponentTransformation tf = (NDYComponentTransformation) mParent.findComponent("transformation");
-		NDYComponentCinematicSailboat cm = (NDYComponentCinematicSailboat) mParent.findComponent("cinematic");
+		NDYComponentPhysicsSailboat cm = (NDYComponentPhysicsSailboat) mParent.findComponent("physics");
 
 		quatBoat.x = tf.rotQ.x;
 		quatBoat.y = tf.rotQ.y;

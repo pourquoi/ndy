@@ -1,6 +1,7 @@
 package ndy.game.actor;
 
-import ndy.game.component.NDYComponentCinematicSailboat;
+import ndy.game.component.NDYComponentPhysics;
+import ndy.game.component.NDYComponentPhysicsSailboat;
 import ndy.game.component.NDYComponentTransformation;
 import ndy.game.message.NDYMessage;
 import ndy.game.message.NDYMessageInput;
@@ -37,14 +38,15 @@ public class NDYInterface extends NDYActor {
 			case NDYMessageInput.T_MOVE:
 				if (NDYGame.instance.mRacer != null) {
 					if (NDYGame.instance.mInterface.mFocus == NDYInterface.FOCUS_MAINSAIL) {
-						NDYComponentCinematicSailboat b = (NDYComponentCinematicSailboat) NDYGame.instance.mRacer.findComponent("cinematic");
+						NDYComponentPhysicsSailboat b = (NDYComponentPhysicsSailboat) NDYGame.instance.mRacer.findComponent("physics");
 						if (b != null) {
 							b.mMainSailRot = b.mMainSailRot + input.dx;
 						}
 					} else if (NDYGame.instance.mInterface.mFocus == NDYInterface.FOCUS_RUDDER) {
-						NDYComponentTransformation trans = (NDYComponentTransformation) NDYGame.instance.mRacer.findComponent("transformation");
-						if (trans != null)
-							trans.rot.y -= input.dx;
+						NDYComponentPhysicsSailboat b = (NDYComponentPhysicsSailboat) NDYGame.instance.mRacer.findComponent("physics");
+						if (b != null) {
+							b.mRudderRot = b.mRudderRot + input.dx;
+						}
 					}
 				}
 				if (NDYGame.instance.mInterface.mFocus == NDYInterface.FOCUS_NONE) {

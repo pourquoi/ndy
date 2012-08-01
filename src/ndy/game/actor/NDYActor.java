@@ -3,6 +3,8 @@ package ndy.game.actor;
 import java.util.Hashtable;
 
 import ndy.game.component.NDYComponent;
+import ndy.game.component.NDYComponentCollider;
+import ndy.game.component.NDYComponentPhysics;
 import ndy.game.message.NDYMessage;
 
 public class NDYActor {
@@ -28,10 +30,20 @@ public class NDYActor {
 
 	public void addComponent(NDYComponent component) {
 		component.setParent(this);
-		mComponents.put(component.getName(), component);
+		String name = component.getName();
+		mComponents.put(name, component);
+		if( name == "collider" && NDYGame.instance.hasActor(this) ) {
+			NDYGame.instance.colliders.add((NDYComponentCollider)component);
+		}
 	}
 
 	public void removeComponent(String name) {
+		if( name == "collider" ) {
+			NDYComponentPhysics c = (NDYComponentPhysics)mComponents.get(name);
+			if( c != null && NDYGame.instance.hasActor(this) ) {
+				NDYGame.instance.colliders.remove(c);
+			}
+		}
 		mComponents.remove(name);
 	}
 

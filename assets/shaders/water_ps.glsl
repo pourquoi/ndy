@@ -44,21 +44,21 @@ vec3 applywavenormal(in vec3 P0, in float t) {
 }
 
 void main() {
-	float h = texture2D(sTexture2,vHeightmapCoord).r;
+	float h = texture2D(sTexture2,vHeightmapCoord).b;
 	
-	if(h<0.5) {
+	if(h<0.1) {
 		vec3 D = uEyePos - vPos;
 		float l = length(D);
 		D /= l;
 		float a = l/100.0;
 		vec3 N = vec3(0.0,1.0,0.0);
-		/*if( a > 1.0 ) {
-			N = vec3(0.0,1.0,0.0);
-		} else {
-			vec3 N1 = applywavenormal(vPos, uTime);
-			vec3 N2 = vec3(0.0,1.0,0.0);
-			N = a*N2 + (1.0-a)*N1;
-		}*/
+		//if( a > 1.0 ) {
+		//	N = vec3(0.0,1.0,0.0);
+		//} else {
+		//	vec3 N1 = applywavenormal(vPos, uTime);
+		//	vec3 N2 = vec3(0.0,1.0,0.0);
+		//	N = a*N2 + (1.0-a)*N1;
+		//}
 		
 		vec3 L = (uLightDir);
 		vec3 R = (reflect(L,N));		
@@ -73,4 +73,5 @@ void main() {
 	} else {
 		gl_FragColor = vec4(1.0,0.0,0.0,1.0);
 	}	
+
 }

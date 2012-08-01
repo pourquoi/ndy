@@ -48,7 +48,7 @@ vec3 applywavepoint(in vec3 P0, in float t) {
 void main() {
 	vPos = vec3(uWorldMatrix * vec4(aPosition,1.0));
 	
-	vec3 pos = vPos;// applywavepoint(vPos,uTime);
+	vec3 pos = applywavepoint(vPos,uTime);
 	vTextureCoord = aTextureCoord;
 	vHeightmapCoord = vec2((vPos.x-uWaterPos.x)/uWaterSize.x,1.0-(vPos.z-uWaterPos.y)/uWaterSize.y);
 	
