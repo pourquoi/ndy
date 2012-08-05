@@ -1,8 +1,8 @@
 package ndy.game.component;
 
 import ndy.game.NDYGLSurfaceView;
+import ndy.game.NDYGame;
 import ndy.game.actor.NDYActor;
-import ndy.game.actor.NDYGame;
 import ndy.game.material.NDYTexture;
 import ndy.game.math.NDYVector3;
 import ndy.game.mesh.NDYMesh;

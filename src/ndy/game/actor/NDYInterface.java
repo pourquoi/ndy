@@ -1,5 +1,6 @@
 package ndy.game.actor;
 
+import ndy.game.NDYGame;
 import ndy.game.component.NDYComponentPhysics;
 import ndy.game.component.NDYComponentPhysicsSailboat;
 import ndy.game.component.NDYComponentTransformation;

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sailing on world\'s lakes</string>
+    <string name="menu_race">Race</string>
+    <string name="menu_resume">Resume</string>
+    <string name="menu_options">Options</string>
     <string name="lake_mazury_name">Mazury, Poland</string>
     <string name="lake_mazury_desc">
 	Masuria (Polish: Mazury) is a natural region in northeastern Poland famous for its 2,000 lakes. 

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<lake 
-    name="@string/lake_mazury_name"
-    desc="@string/lake_mazury_desc"
-    map="textures/map_mazury.jpg"
-    width="1000.0"
-    length="1000.0">
-    <material ambiant="" diffuse="" specular=""></material>
-</lake>

@@ -1,12 +1,13 @@
 package ndy.game.actor;
 
+import ndy.game.component.NDYComponent;
 import ndy.game.math.NDYVector3;
 import ndy.game.message.NDYMessage;
 import ndy.game.message.NDYMessageUpdate;
 import android.opengl.Matrix;
 import android.util.Log;
 
-public class NDYCamera extends NDYActor {
+public class NDYCamera extends NDYComponent {
 	public static int MODE_ORTHO = 1;
 	public static int MODE_PERSPECTIVE = 2;
 
@@ -23,10 +24,7 @@ public class NDYCamera extends NDYActor {
 	}
 
 	@Override
-	public boolean dispatchMessage(NDYMessage msg) {
-		if (super.dispatchMessage(msg))
-			return true;
-
+	public boolean processMessage(NDYMessage msg) {
 		if (msg.getClass() == NDYMessageUpdate.class) {
 			if (mMode == MODE_PERSPECTIVE) {
 				Matrix.setLookAtM(mViewMatrix, 0, mPos.x, mPos.y, mPos.z,

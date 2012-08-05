@@ -3,9 +3,9 @@ package ndy.game.component;
 import java.util.Random;
 
 import ndy.game.NDYGLSurfaceView;
+import ndy.game.NDYGame;
 import ndy.game.actor.NDYActor;
 import ndy.game.actor.NDYCamera;
-import ndy.game.actor.NDYGame;
 import ndy.game.material.NDYWaterDesc;
 import ndy.game.math.NDYMath;
 import ndy.game.math.NDYVector3;

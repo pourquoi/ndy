@@ -1,7 +1,8 @@
 package ndy.game.component;
 
-import ndy.game.material.NDYTexture;
 import ndy.game.math.NDYVector3;
+import ndy.game.message.NDYMessage;
+import ndy.game.message.NDYMessageUpdate;
 
 public class NDYWeather extends NDYComponent {
 	public NDYVector3 mLightDir = new NDYVector3();
@@ -12,7 +13,14 @@ public class NDYWeather extends NDYComponent {
 
 	public NDYWeather() {
 		super("weather");
-		
 		mEnvTex = "textures/env_cloud_few_midmorning.png";
+	}
+	
+	@Override
+	public boolean processMessage(NDYMessage msg) {
+		if (msg.getClass() == NDYMessageUpdate.class) {
+		}
+		
+		return false;
 	}
 }

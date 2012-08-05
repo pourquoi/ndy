@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.HashMap;
 
-import ndy.game.actor.NDYGame;
+import ndy.game.NDYGame;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;

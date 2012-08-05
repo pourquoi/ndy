@@ -3,7 +3,6 @@ package ndy.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import ndy.game.actor.NDYGame;
 import ndy.game.component.NDYRessource;
 import ndy.game.message.NDYMessageInput;
 import android.opengl.GLES20;
@@ -68,7 +67,6 @@ public class NDYRenderer implements GLSurfaceView.Renderer {
 		for (NDYMessageInput msg : NDYGame.instance.mInput.inputs) {
 			NDYGame.instance.mInterface.dispatchMessage(msg);
 		}
-		NDYGame.instance.mInput.inputs.clear();
 
 		mFPS = 1000.f / (float) frameTime;
 		if (frameTime > mTimeStep * 5)
@@ -83,6 +81,8 @@ public class NDYRenderer implements GLSurfaceView.Renderer {
 		}
 
 		mCurrentTime = newTime;
+		
+		NDYGame.instance.mInput.inputs.clear();
 
 		GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);

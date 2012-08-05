@@ -1,10 +1,10 @@
 package ndy.game.shader;
 
 import ndy.game.NDYGLSurfaceView;
+import ndy.game.NDYGame;
 import ndy.game.NDYRenderer;
 import ndy.game.actor.NDYActor;
 import ndy.game.actor.NDYCamera;
-import ndy.game.actor.NDYGame;
 import ndy.game.component.NDYComponentMaterial;
 import ndy.game.component.NDYRessource;
 import ndy.game.material.NDYMaterial;

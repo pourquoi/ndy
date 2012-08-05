@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import ndy.game.NDYGLSurfaceView;
-import ndy.game.actor.NDYGame;
+import ndy.game.NDYGame;
 import ndy.game.component.NDYRessource;
 import ndy.game.math.NDYBox;
 import ndy.game.math.NDYVector3;

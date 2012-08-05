@@ -3,7 +3,7 @@ package ndy.game.material;
 import java.io.IOException;
 import java.io.InputStream;
 
-import ndy.game.actor.NDYGame;
+import ndy.game.NDYGame;
 import ndy.game.component.NDYRessource;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

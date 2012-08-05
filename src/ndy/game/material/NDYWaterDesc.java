@@ -1,6 +1,6 @@
 package ndy.game.material;
 
-import ndy.game.actor.NDYGame;
+import ndy.game.NDYGame;
 import ndy.game.math.NDYMath;
 import ndy.game.math.NDYVector3;
 import android.util.FloatMath;
