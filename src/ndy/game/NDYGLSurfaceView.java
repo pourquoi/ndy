@@ -1,6 +1,8 @@
 package ndy.game;
 
 import ndy.game.math.NDYMath;
+import ndy.game.message.InputMessage;
+import ndy.game.system.InputSystem;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -13,7 +15,7 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 	private static String TAG = "NDYGLSurfaceView";
 	private float lastTouchX, lastTouchY;
 	private long mLastMoveTime = 0;
-	private NDYRenderer mRenderer;
+	private ndy.game.Renderer mRenderer;
 
 	public NDYGLSurfaceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -21,7 +23,7 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 			setEGLContextClientVersion(2);
 			setEGLConfigChooser(true);
 
-			mRenderer = new NDYRenderer();
+			mRenderer = new ndy.game.Renderer();
 			setRenderer(mRenderer);
 		}
 	}
@@ -54,19 +56,17 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 		this.queueEvent(new Runnable() {
 			@Override
 			public void run() {
-				NDYInput input = NDYGame.instance.mInput;
+				InputSystem inputSystem = (InputSystem)Game.instance.systems.get(InputSystem.name);
 				switch (action) {
 				case MotionEvent.ACTION_UP:
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
 
-					input.up(lastTouchX, lastTouchY);
 					break;
 				case MotionEvent.ACTION_DOWN:
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
 
-					input.down(lastTouchX, lastTouchY);
 					break;
 				case MotionEvent.ACTION_MOVE:
 					float dx = NDYMath.clamp(event.getX() - lastTouchX, -3.f, 3.f);
@@ -74,7 +74,16 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 					lastTouchX = event.getX();
 					lastTouchY = event.getY();
 
-					input.move(dx, dy);
+					InputMessage msg = new InputMessage();
+					msg.action = InputMessage.RUDDER;
+					msg.dx = dx;
+					inputSystem.inputBuffer.add(msg);
+					
+					msg = new InputMessage();
+					msg.action = InputMessage.CAMERA;
+					msg.dy = dy;
+					inputSystem.inputBuffer.add(msg);
+					
 					break;
 				default:
 				}

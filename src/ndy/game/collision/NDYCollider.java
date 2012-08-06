@@ -1,6 +1,6 @@
 package ndy.game.collision;
 
-import ndy.game.math.NDYPolygon;
+import ndy.game.math.Polygon;
 
 public abstract class NDYCollider {
 	public static final int T_STATIC = 1;
@@ -11,7 +11,7 @@ public abstract class NDYCollider {
 	public int type;
 	public int structure;
 	
-	public NDYPolygon getPolygon() {
+	public Polygon getPolygon() {
 		return null;
 	}
 }

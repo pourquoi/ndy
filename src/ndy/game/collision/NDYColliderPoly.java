@@ -1,16 +1,16 @@
 package ndy.game.collision;
 
-import ndy.game.math.NDYPolygon;
+import ndy.game.math.Polygon;
 
 public class NDYColliderPoly extends NDYCollider {
-	NDYPolygon polygon;
+	Polygon polygon;
 	
-	public NDYColliderPoly(NDYPolygon polygon) {
+	public NDYColliderPoly(Polygon polygon) {
 		this.polygon = polygon;
 		this.structure = NDYCollider.STRUCT_POLY;
 	}
 	
-	public NDYPolygon getPolygon() {
+	public Polygon getPolygon() {
 		return polygon;
 	}
 }

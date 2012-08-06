@@ -1,6 +1,6 @@
 package ndy.game.views;
 
-import ndy.game.NDYGame;
+import ndy.game.Game;
 import ndy.game.R;
 import ndy.game.R.layout;
 import android.app.Activity;
@@ -17,7 +17,7 @@ public class Menu extends Activity {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.menu);
 		
-		NDYGame.instance = new NDYGame();
+		Game.instance = new Game();
 	}
 	
 	public void race(View view) {

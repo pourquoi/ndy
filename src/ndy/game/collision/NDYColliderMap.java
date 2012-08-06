@@ -3,7 +3,7 @@ package ndy.game.collision;
 import java.io.IOException;
 import java.io.InputStream;
 
-import ndy.game.NDYGame;
+import ndy.game.Game;
 import ndy.game.math.NDYMath;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,7 +28,7 @@ public class NDYColliderMap extends NDYCollider {
 		InputStream is = null;
 
 		try {
-			is = NDYGame.instance.mContext.getAssets().open(name);
+			is = Game.instance.mContext.getAssets().open(name);
 		} catch (IOException e) {
 		} finally {
 			Bitmap bitmap;

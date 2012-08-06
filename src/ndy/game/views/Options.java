@@ -1,6 +1,6 @@
 package ndy.game.views;
 
-import ndy.game.NDYGame;
+import ndy.game.Game;
 import ndy.game.R;
 import ndy.game.R.layout;
 import android.app.Activity;
