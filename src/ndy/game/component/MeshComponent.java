@@ -35,8 +35,7 @@ public class MeshComponent extends Component {
 
 		Matrix.setIdentityM(tmpMatrix, 0);
 		Matrix.translateM(tmpMatrix, 0, tf.pos.x, tf.pos.y, tf.pos.z);
-
-		tf.rotQ.getMatrix(tmpMatrix, 16);
+		Matrix.setRotateEulerM(tmpMatrix, 16, tf.rot.x, tf.rot.y, tf.rot.z);
 
 		Matrix.multiplyMM(modelMatrix, 0, tmpMatrix, 0, tmpMatrix, 16);
 		Matrix.scaleM(modelMatrix, 0, tf.scale.x, tf.scale.y, tf.scale.z);

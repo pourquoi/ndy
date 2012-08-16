@@ -1,11 +1,11 @@
 package ndy.game.component;
 
-import ndy.game.NDYGLSurfaceView;
 import ndy.game.Game;
+import ndy.game.NDYGLSurfaceView;
 import ndy.game.Ressource;
 import ndy.game.actor.Actor;
+import ndy.game.actor.GameWorld;
 import ndy.game.material.Texture;
-import ndy.game.math.Vector3;
 import ndy.game.mesh.Mesh;
 import ndy.game.mesh.SubMesh;
 import ndy.game.message.Message;
@@ -38,7 +38,7 @@ public class SpriteComponent extends Component {
 		}
 
 		mMesh = Mesh.quad2d();
-		
+
 		systems.add(RenderSystem.name);
 	}
 
@@ -47,10 +47,9 @@ public class SpriteComponent extends Component {
 		Actor r = parent;
 
 		if (msg.getClass() == RenderMessage.class) {
-			TransformationComponent trans = (TransformationComponent) r
-					.findComponent("transformation");
-			Game w = Game.instance;
-			w.mCamera = w.mCameraOrtho;
+			TransformationComponent transformationComponent = (TransformationComponent) r.findComponent("transformation");
+			GameWorld w = Game.instance.world;
+			w.camera = w.cameraOrtho;
 
 			ProgramBasic p = (ProgramBasic) mProgram;
 
@@ -68,39 +67,30 @@ public class SpriteComponent extends Component {
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexture.getId());
 
 			Matrix.setIdentityM(mMatrix, 0);
-			Vector3 pos = trans.pos;
-			Matrix.translateM(mMatrix, 0, pos.x, pos.y, pos.z);
-			Vector3 scale = trans.scale;
-			Matrix.scaleM(mMatrix, 0, scale.x, scale.y, 0);
+			Matrix.translateM(mMatrix, 0, transformationComponent.pos.x, transformationComponent.pos.y, transformationComponent.pos.z);
+			Matrix.scaleM(mMatrix, 0, transformationComponent.scale.x, transformationComponent.scale.y, 0);
 
-			GLES20.glUniformMatrix4fv(p.mWorldMatrixHandle, 1, false, mMatrix,
-					0);
+			GLES20.glUniformMatrix4fv(p.mWorldMatrixHandle, 1, false, mMatrix, 0);
 			NDYGLSurfaceView.checkGLError("glUniformMatrix4fv world matrix");
 
 			quad.vbuffer.position(quad.posOffset);
-			GLES20.glVertexAttribPointer(p.mPositionHandle, 3, GLES20.GL_FLOAT,
-					false, quad.vsize, quad.vbuffer);
+			GLES20.glVertexAttribPointer(p.mPositionHandle, 3, GLES20.GL_FLOAT, false, quad.vsize, quad.vbuffer);
 			NDYGLSurfaceView.checkGLError("glVertexAttribPointer maPosition");
 
 			GLES20.glEnableVertexAttribArray(mProgram.mPositionHandle);
-			NDYGLSurfaceView
-					.checkGLError("glEnableVertexAttribArray maPositionHandle");
+			NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray maPositionHandle");
 
 			quad.vbuffer.position(quad.texcoordsOffset);
-			GLES20.glVertexAttribPointer(p.mTextureHandle, 2, GLES20.GL_FLOAT,
-					false, quad.vsize, quad.vbuffer);
-			NDYGLSurfaceView
-					.checkGLError("glVertexAttribPointer maTextureHandle");
+			GLES20.glVertexAttribPointer(p.mTextureHandle, 2, GLES20.GL_FLOAT, false, quad.vsize, quad.vbuffer);
+			NDYGLSurfaceView.checkGLError("glVertexAttribPointer maTextureHandle");
 
 			GLES20.glEnableVertexAttribArray(p.mTextureHandle);
-			NDYGLSurfaceView
-					.checkGLError("glEnableVertexAttribArray maTextureHandle");
+			NDYGLSurfaceView.checkGLError("glEnableVertexAttribArray maTextureHandle");
 
-			GLES20.glDrawArrays(quad.drawMode, 0, quad.vbuffer.capacity()
-					* Mesh.FLOAT_SIZE_BYTES / quad.vsize);
+			GLES20.glDrawArrays(quad.drawMode, 0, quad.vbuffer.capacity() * Mesh.FLOAT_SIZE_BYTES / quad.vsize);
 			NDYGLSurfaceView.checkGLError("glDrawArrays");
 
-			w.mCamera = w.mCameraPerspective;
+			w.camera = w.cameraPerspective;
 		}
 
 		return false;

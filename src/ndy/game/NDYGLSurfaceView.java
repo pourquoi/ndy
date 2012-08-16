@@ -56,7 +56,9 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 		this.queueEvent(new Runnable() {
 			@Override
 			public void run() {
-				InputSystem inputSystem = (InputSystem)Game.instance.systems.get(InputSystem.name);
+				if (Game.instance == null)
+					return;
+				InputSystem inputSystem = (InputSystem) Game.instance.systems.get(InputSystem.name);
 				switch (action) {
 				case MotionEvent.ACTION_UP:
 					lastTouchX = event.getX();
@@ -78,12 +80,12 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 					msg.action = InputMessage.RUDDER;
 					msg.dx = dx;
 					inputSystem.inputBuffer.add(msg);
-					
+
 					msg = new InputMessage();
 					msg.action = InputMessage.CAMERA;
 					msg.dy = dy;
 					inputSystem.inputBuffer.add(msg);
-					
+
 					break;
 				default:
 				}

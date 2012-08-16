@@ -1,56 +1,43 @@
 package ndy.game.component;
 
-import ndy.game.Game;
-import ndy.game.collision.NDYCollider;
-import ndy.game.collision.NDYCollision;
 import ndy.game.message.Message;
 import ndy.game.message.UpdateMessage;
-import ndy.game.system.WorldSystem;
+import ndy.game.system.PhysicsSystem;
+
+import org.jbox2d.common.Transform;
+import org.jbox2d.dynamics.Body;
 
 public class PhysicsComponent extends Component {
 	private static final String TAG = "NDYComponentPhysics";
-	public float speed = 0.f;
-	public float rotspeed = 0.f;
-	public float mass = 1.f;
 
-	public PhysicsComponent() {
+	protected Body _body;
+
+	public PhysicsComponent(Body body) {
 		super("physics");
-		
-		systems.add(WorldSystem.name);
+		systems.add(PhysicsSystem.name);
+		_body = body;
 	}
-	
+
 	public boolean processMessage(Message msg) {
 		if (msg.getClass() == UpdateMessage.class) {
-			TransformationComponent trans = (TransformationComponent) parent.findComponent("transformation");
-			
+			UpdateMessage m = (UpdateMessage) msg;
+			step(m.getInterval() / 1000f);
+
+			TransformationComponent transformationComponent = (TransformationComponent) parent.findComponent("transformation");
+
+			if (_body != null) {
+				Transform t = _body.getTransform();
+				transformationComponent.pos.x = t.position.x;
+				transformationComponent.pos.z = t.position.y;
+
+				transformationComponent.rot.y = t.getAngle();
+			}
 		}
 
 		return false;
 	}
-	
-	public void computeSpeed() {
-		
-	}
-	
-	public void computePos() {
-		
-	}
-	
-	public void checkCollisions(ComponentCollider a) {
-		if(a.collider.type == NDYCollider.T_STATIC) return;
 
-		NDYCollision r = new NDYCollision();
-		for(ComponentCollider b:Game.instance.colliders) {
-			
-			if( ComponentCollider.checkCollision(a, b, r) ) {
-				handleCollision(r);
-			}
-		}
-	}
-	
-	public void handleCollision(NDYCollision collision) {
-		if( collision.action == NDYCollision.ACTION_SLOW_A && collision.a == parent ) {
-			//speed = speed * (1.f-collision.slow);			
-		}
+	public void step(float dt) {
+
 	}
 }

@@ -3,7 +3,6 @@ package ndy.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import ndy.game.message.InputMessage;
 import ndy.game.message.RenderMessage;
 import ndy.game.message.UpdateMessage;
 import ndy.game.system.InputSystem;
@@ -24,13 +23,13 @@ public class Renderer implements GLSurfaceView.Renderer {
 	public Renderer() {
 		mCurrentTime = SystemClock.uptimeMillis();
 	}
-	
-	static
-	{
-	    System.loadLibrary("fix-GLES20");
+
+	static {
+		System.loadLibrary("fix-GLES20");
 	}
 
 	native public static void glVertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int offset);
+
 	native public static void glDrawElements(int mode, int count, int type, int offset);
 
 	@Override
@@ -55,17 +54,19 @@ public class Renderer implements GLSurfaceView.Renderer {
 	@Override
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
 		GLES20.glViewport(0, 0, w, h);
-		Game.instance.mCameraPerspective.resize(w, h);
-		Game.instance.mCameraOrtho.resize(w, h);
+		Game.instance.world.cameraPerspective.resize(w, h);
+		Game.instance.world.cameraOrtho.resize(w, h);
 	}
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		long newTime = SystemClock.uptimeMillis();
 		long frameTime = newTime - mCurrentTime;
-		
-		InputSystem inputSystem = (InputSystem)Game.instance.systems.get(InputSystem.name);
-		inputSystem.dispatchInputs();
+
+		if (Game.instance != null) {
+			InputSystem inputSystem = (InputSystem) Game.instance.systems.get(InputSystem.name);
+			inputSystem.dispatchInputs();
+		}
 
 		mFPS = 1000.f / (float) frameTime;
 		if (frameTime > mTimeStep * 5)
@@ -75,9 +76,11 @@ public class Renderer implements GLSurfaceView.Renderer {
 		mAccumulator += frameTime;
 
 		while (mAccumulator >= mTimeStep) {
-			UpdateMessage mupdate = new UpdateMessage();
-			mupdate.setInterval(mTimeStep);
-			Game.instance.dispatchMessage(mupdate);
+			if (Game.instance != null) {
+				UpdateMessage mupdate = new UpdateMessage();
+				mupdate.setInterval(mTimeStep);
+				Game.instance.state.dispatchMessage(mupdate);
+			}
 			mAccumulator -= mTimeStep;
 		}
 
@@ -86,7 +89,9 @@ public class Renderer implements GLSurfaceView.Renderer {
 		GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
-		RenderMessage mrender = new RenderMessage();
-		Game.instance.dispatchMessage(mrender);
+		if (Game.instance != null) {
+			RenderMessage mrender = new RenderMessage();
+			Game.instance.state.dispatchMessage(mrender);
+		}
 	}
 }

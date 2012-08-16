@@ -5,8 +5,7 @@ import java.nio.ByteOrder;
 
 import ndy.game.NDYGLSurfaceView;
 import ndy.game.Ressource;
-import ndy.game.math.NDYMath;
-import ndy.game.math.Vector3;
+import ndy.game.math.Vec3;
 import android.opengl.GLES20;
 
 public class TextureWaterNormals extends Ressource {
@@ -46,7 +45,7 @@ public class TextureWaterNormals extends Ressource {
         ByteBuffer texbuf = ByteBuffer.allocateDirect(texw*texh*4).order(ByteOrder.nativeOrder());
         byte [] col = new byte[4];
         
-        Vector3 N = new Vector3();
+        Vec3 N = new Vec3();
         
         for(int i=0;i<texw;i++) {
         	for(int j=0;j<texh;j++) {

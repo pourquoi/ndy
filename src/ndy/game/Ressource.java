@@ -1,10 +1,19 @@
 package ndy.game;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.HashMap;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -29,7 +38,7 @@ public class Ressource {
 	public static Ressource getRessource(String name) {
 		Ressource r = ressourcePool.get(name);
 		if (r != null) {
-			r.mLastAccess = Game.instance.mTime;
+			r.mLastAccess = Game.instance.time;
 		}
 		return r;
 	}
@@ -51,6 +60,29 @@ public class Ressource {
 		for (Ressource r : c) {
 			r.unload();
 		}
+	}
+	
+	public static Element readXMLFile(Context context, String filename) {
+		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = null;
+		try {
+			builder = builderFactory.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+
+		Document document = null;
+
+		try {
+			AssetManager am = Game.instance.mContext.getAssets();
+			document = builder.parse(am.open(filename));
+		} catch (SAXException e) {
+			throw new RuntimeException("Error parsing actor xml " + filename + ": " + e.getMessage());
+		} catch (IOException e) {
+			throw new RuntimeException("Error reading actor xml: " + filename + ": " + e.getMessage());
+		}
+
+		return document.getDocumentElement();
 	}
 
 	public static String readTextFile(Context context, String filename) {

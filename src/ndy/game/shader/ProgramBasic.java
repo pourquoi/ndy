@@ -1,14 +1,15 @@
 package ndy.game.shader;
 
-import ndy.game.NDYGLSurfaceView;
 import ndy.game.Game;
+import ndy.game.NDYGLSurfaceView;
 import ndy.game.Renderer;
 import ndy.game.Ressource;
 import ndy.game.actor.Actor;
 import ndy.game.actor.Camera;
+import ndy.game.actor.GameWorld;
 import ndy.game.component.MaterialComponent;
 import ndy.game.material.Material;
-import ndy.game.math.Vector3;
+import ndy.game.math.Vec3;
 import ndy.game.mesh.Mesh;
 import ndy.game.mesh.SubMesh;
 import android.opengl.GLES20;
@@ -99,14 +100,15 @@ public class ProgramBasic extends Program {
 
 	public void sendGameParams() {
 		Game g = Game.instance;
+		GameWorld w = Game.instance.world;
 
 		if (mTimeHandle != -1) {
-			float t = g.mTime / 1000.f;
+			float t = g.time / 1000.f;
 			GLES20.glUniform1f(mTimeHandle, t);
 			NDYGLSurfaceView.checkGLError("glUniform1f time");
 		}
 
-		Camera c = g.mCamera;
+		Camera c = w.camera;
 
 		GLES20.glUniformMatrix4fv(mViewMatrixHandle, 1, false, c.mViewMatrix, 0);
 		NDYGLSurfaceView.checkGLError("glUniformMatrix4fv view matrix");
@@ -115,12 +117,12 @@ public class ProgramBasic extends Program {
 		NDYGLSurfaceView.checkGLError("glUniformMatrix4fv projection matrix");
 
 		if (mEyePosHandle != -1) {
-			GLES20.glUniform3f(mEyePosHandle, c.mPos.x, c.mPos.y, c.mPos.z);
+			GLES20.glUniform3f(mEyePosHandle, c.pos.x, c.pos.y, c.pos.z);
 			NDYGLSurfaceView.checkGLError("glUniform3f eyepos");
 		}
 
 		if (mLightDirHandle != -1) {
-			Vector3 ldir = g.mWeather.mLightDir;
+			Vec3 ldir = g.world.weather.mLightDir;
 			GLES20.glUniform3f(mLightDirHandle, ldir.x, ldir.y, ldir.z);
 			NDYGLSurfaceView.checkGLError("glUniform3f lightdir");
 		}

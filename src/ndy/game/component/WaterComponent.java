@@ -2,13 +2,11 @@ package ndy.game.component;
 
 import java.util.Random;
 
-import ndy.game.NDYGLSurfaceView;
 import ndy.game.Game;
+import ndy.game.NDYGLSurfaceView;
 import ndy.game.actor.Actor;
-import ndy.game.actor.Camera;
 import ndy.game.material.WaterOptions;
 import ndy.game.math.NDYMath;
-import ndy.game.math.Vector3;
 import ndy.game.mesh.Mesh;
 import ndy.game.mesh.SubMesh;
 import ndy.game.message.Message;
@@ -62,7 +60,7 @@ public class WaterComponent extends Component {
 
 		Random rnd = new Random();
 
-		float wa = Game.instance.mWeather.mWindRot;
+		float wa = Game.instance.world.weather.mWindRot;
 
 		for (int i = 0; i < numWaves; i++) {
 			water.wavelength[i] = wavelength + rnd.nextFloat() * wavelength;
@@ -75,10 +73,6 @@ public class WaterComponent extends Component {
 			water.wavedir[i * 2 + 1] = FloatMath.sin(a);
 			water.calcConst();
 		}
-	}
-
-	public void load(XmlPullParser xpp) {
-
 	}
 
 	public void renderPatch(ProgramWater p, SubMesh submesh, float x, float z, float w, float h) {
@@ -104,10 +98,6 @@ public class WaterComponent extends Component {
 			ProgramWater p = (ProgramWater) program;
 			p.sendGameParams();
 			p.sendActorMaterials(parent);
-
-			Game w = Game.instance;
-			Camera c = w.mCameraPerspective;
-			Vector3 cpos = c.mPos;
 
 			Actor r = parent;
 			TransformationComponent trans = (TransformationComponent) r.findComponent("transformation");

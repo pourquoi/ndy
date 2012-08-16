@@ -1,8 +1,7 @@
 package ndy.game.material;
 
-import ndy.game.Game;
 import ndy.game.math.NDYMath;
-import ndy.game.math.Vector3;
+import ndy.game.math.Vec3;
 import android.util.FloatMath;
 
 public class WaterOptions {
@@ -25,14 +24,14 @@ public class WaterOptions {
 	
 	public void calcConst() {
 		for(int i=0;i<amplitude.length;i++) {
-			wconst[i*4] = FloatMath.sqrt(NDYMath.TWOPI * Game.instance.mWeather.mGravity / wavelength[i]);
+			wconst[i*4] = FloatMath.sqrt(NDYMath.TWOPI * 9.8f / wavelength[i]);
 			wconst[i*4+1] = NDYMath.TWOPI / wavelength[i];
 			wconst[i*4+2] = wavedir[i*2] * amplitude[i];
 			wconst[i*4+3] = wavedir[i*2+1] * amplitude[i];
 		}
 	}
 	
-	public void getWaveNormal(float x, float y, Vector3 N, int i) {
+	public void getWaveNormal(float x, float y, Vec3 N, int i) {
 		N.x = 0.f;
 		N.y = 1.f;
 		N.z = 0.f;
@@ -47,7 +46,7 @@ public class WaterOptions {
 		N.normalize();
 	}
 	
-	public void getNormal(float x, float y, float t, Vector3 N) {
+	public void getNormal(float x, float y, float t, Vec3 N) {
 		N.x = 0.f;
 		N.y = 1.f;
 		N.z = 0.f;

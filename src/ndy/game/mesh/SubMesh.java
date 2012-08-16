@@ -6,7 +6,9 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 import ndy.game.material.Material;
-import ndy.game.math.Box;
+
+import org.jbox2d.collision.AABB;
+
 import android.opengl.GLES20;
 
 public class SubMesh {
@@ -29,7 +31,7 @@ public class SubMesh {
 	public int colorOffset = 3;
 	public int texcoordsOffset;
 	
-	public Box bbox;
+	public AABB aabb;
 
 	public Material material;
 

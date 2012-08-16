@@ -16,14 +16,12 @@ public class Menu extends Activity {
 
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.menu);
-		
-		Game.instance = new Game();
 	}
 	
 	public void race(View view) {
 		Intent i = new Intent();
 		i.setAction(Intent.ACTION_MAIN);
-		i.setClass(getApplicationContext(), Options.class);
+		i.setClass(getApplicationContext(), LakeChoice.class);
 		this.startActivity(i);
 	}
 
