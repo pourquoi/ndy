@@ -3,8 +3,11 @@ package ndy.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import ndy.game.component.CameraComponent;
+import ndy.game.component.Component;
 import ndy.game.message.RenderMessage;
 import ndy.game.message.UpdateMessage;
+import ndy.game.system.CameraSystem;
 import ndy.game.system.InputSystem;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -54,8 +57,13 @@ public class Renderer implements GLSurfaceView.Renderer {
 	@Override
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
 		GLES20.glViewport(0, 0, w, h);
-		Game.instance.world.cameraPerspective.resize(w, h);
-		Game.instance.world.cameraOrtho.resize(w, h);
+
+		if (Game.instance != null) {
+			CameraSystem cameraSystem = (CameraSystem) Game.instance.systems.get(CameraSystem.name);
+			for (Component c : cameraSystem.components) {
+				((CameraComponent) c).resize(w, h);
+			}
+		}
 	}
 
 	@Override

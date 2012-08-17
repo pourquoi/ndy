@@ -1,6 +1,6 @@
-package ndy.game.actor;
+package ndy.game.component;
 
-import ndy.game.component.TransformationComponent;
+import ndy.game.actor.Actor;
 import ndy.game.message.Message;
 import ndy.game.message.UpdateMessage;
 
@@ -9,18 +9,18 @@ import org.jbox2d.common.Vec2;
 
 import android.opengl.Matrix;
 
-public class CameraFollow extends Camera {
+public class CameraFollowComponent extends CameraComponent {
 	private Actor _targetActor;
 	private Vec2 _wantedPos = new Vec2();
 	private Vec2 _targetDir = new Vec2();
 	private float _distance;
 	
-	public CameraFollow(Actor target, float distance) {
-		super();
+	public CameraFollowComponent(String name, Actor target, float distance) {
+		super(name);
 		_targetActor = target;
 		_distance = distance;
 		
-		mode = Camera.MODE_PERSPECTIVE;
+		mode = CameraComponent.MODE_PERSPECTIVE;
 	}
 	
 	@Override

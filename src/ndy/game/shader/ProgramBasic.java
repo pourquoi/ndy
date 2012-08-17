@@ -5,8 +5,8 @@ import ndy.game.NDYGLSurfaceView;
 import ndy.game.Renderer;
 import ndy.game.Ressource;
 import ndy.game.actor.Actor;
-import ndy.game.actor.Camera;
 import ndy.game.actor.GameWorld;
+import ndy.game.component.CameraComponent;
 import ndy.game.component.MaterialComponent;
 import ndy.game.material.Material;
 import ndy.game.math.Vec3;
@@ -108,7 +108,7 @@ public class ProgramBasic extends Program {
 			NDYGLSurfaceView.checkGLError("glUniform1f time");
 		}
 
-		Camera c = w.camera;
+		CameraComponent c = w.camera;
 
 		GLES20.glUniformMatrix4fv(mViewMatrixHandle, 1, false, c.mViewMatrix, 0);
 		NDYGLSurfaceView.checkGLError("glUniformMatrix4fv view matrix");

@@ -1,6 +1,5 @@
 package ndy.game.component;
 
-import ndy.game.actor.Camera;
 import ndy.game.actor.GameWorld;
 import ndy.game.message.InputMessage;
 import ndy.game.message.Message;
@@ -16,7 +15,7 @@ public class WorldInputComponent extends Component {
 		if (msg.getType() == Message.T_INPUT) {
 			InputMessage m = (InputMessage) msg;
 			if(m.action == InputMessage.CAMERA) {
-				Camera c = ((GameWorld)parent).camera;
+				CameraComponent c = ((GameWorld)parent).camera;
 				if (c != null)
 					c.pos.y += m.dy;
 				if (c.pos.y < 5.f)

@@ -13,35 +13,35 @@ import org.w3c.dom.NodeList;
 public class Actor {
 	private static final String TAG = "NDYActor";
 
-	protected Hashtable<String, Component> components = new Hashtable<String, Component>();
+	public Hashtable<String, Component> components = new Hashtable<String, Component>();
 	public String name;
 	public boolean inGame = false;
 
 	public static Actor load(Element element) {
 		String componentClass = element.getAttribute("class");
 		Actor actor = null;
-		if(!componentClass.equals("")) {
+		if (!componentClass.equals("")) {
 			try {
 				Class c = Class.forName(componentClass);
-				actor = (Actor)c.getMethod("load", Element.class).invoke(null, element);
-			} catch(Exception e) {
+				actor = (Actor) c.getMethod("load", Element.class).invoke(null, element);
+			} catch (Exception e) {
 				throw new RuntimeException("Error parsing actor DOM:" + e.getMessage());
 			}
-			
+
 			actor.parseDOM(element);
 		}
 
 		NodeList children = element.getElementsByTagName("component");
-		for(int i=0;i<children.getLength();i++) {
+		for (int i = 0; i < children.getLength(); i++) {
 			Node node = children.item(i);
-			Component c = Component.load((Element)node);
-			c.parseDOM((Element)node);
+			Component c = Component.load((Element) node);
+			c.parseDOM((Element) node);
 		}
 
 		return null;
 	}
 
-	public Actor() {	
+	public Actor() {
 	}
 
 	public Actor(String name) {
@@ -49,7 +49,7 @@ public class Actor {
 	}
 
 	public void parseDOM(Element element) {
-		
+
 	}
 
 	public boolean dispatchMessage(Message msg) {

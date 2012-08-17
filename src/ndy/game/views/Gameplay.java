@@ -14,7 +14,7 @@ public class Gameplay extends Activity {
 		
 		this.setContentView(R.layout.gameplay);
 		
-		RaceOptions options = RaceOptions.fromBundle(savedInstanceState.getBundle("options"));
+		RaceOptions options = RaceOptions.fromBundle(getIntent().getBundleExtra("options"));
 		
 		Game.instance = new Game(options);
 	}

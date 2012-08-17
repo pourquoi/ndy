@@ -1,14 +1,15 @@
 package ndy.game.actor;
 
 import ndy.game.RaceOptions;
+import ndy.game.component.CameraComponent;
 import ndy.game.component.EnvironmentComponent;
 import ndy.game.component.WaterComponent;
 
 public class GameWorld extends Actor {
-	public Camera camera;
-	public Camera cameraPerspective;
-	public Camera cameraOrtho;
-	
+	public CameraComponent camera;
+	public CameraComponent cameraPerspective;
+	public CameraComponent cameraOrtho;
+
 	public EnvironmentComponent weather;
 	
 	public Player player;
@@ -20,11 +21,11 @@ public class GameWorld extends Actor {
 	}
 	
 	public void init() {
-		cameraPerspective = new Camera();
-		cameraPerspective.mode = Camera.MODE_PERSPECTIVE;
+		cameraPerspective = new CameraComponent("perspective");
+		cameraPerspective.mode = CameraComponent.MODE_PERSPECTIVE;
 		
-		cameraOrtho = new Camera();
-		cameraOrtho.mode = Camera.MODE_ORTHO;
+		cameraOrtho = new CameraComponent("ortho");
+		cameraOrtho.mode = CameraComponent.MODE_ORTHO;
 		
 		camera = cameraPerspective;
 		

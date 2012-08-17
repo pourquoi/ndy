@@ -1,15 +1,15 @@
-package ndy.game.actor;
+package ndy.game.component;
 
-import ndy.game.component.Component;
 import ndy.game.message.Message;
 import ndy.game.message.UpdateMessage;
+import ndy.game.system.CameraSystem;
 
 import org.jbox2d.common.Vec3;
 
 import android.opengl.Matrix;
 import android.util.Log;
 
-public class Camera extends Component {
+public class CameraComponent extends Component {
 	public static int MODE_ORTHO = 1;
 	public static int MODE_PERSPECTIVE = 2;
 
@@ -21,8 +21,10 @@ public class Camera extends Component {
 	public int width = 0, height = 0;
 	public int mode = MODE_PERSPECTIVE;
 
-	public Camera() {
-		super("camera");
+	public CameraComponent(String name) {
+		super("camera_"+name);
+		
+		systems.add(CameraSystem.name);
 	}
 
 	@Override

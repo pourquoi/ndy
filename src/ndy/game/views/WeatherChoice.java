@@ -5,6 +5,7 @@ import ndy.game.RaceOptions;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 
 public class WeatherChoice extends Activity {
@@ -17,10 +18,10 @@ public class WeatherChoice extends Activity {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.weatherchoice);
 		
-		options = RaceOptions.fromBundle(savedInstanceState.getBundle("options"));
+		options = RaceOptions.fromBundle(getIntent().getBundleExtra("options"));
 	}
 	
-	public void select() {
+	public void select(View view) {
 		Intent i = new Intent();
 		i.putExtra("options", options.toBundle());
 		i.setAction(Intent.ACTION_MAIN);

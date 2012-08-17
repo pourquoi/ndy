@@ -6,8 +6,7 @@ import java.util.HashMap;
 import ndy.game.actor.Actor;
 import ndy.game.actor.GameWorld;
 import ndy.game.component.WaterComponent;
-import ndy.game.message.Message;
-import ndy.game.message.UpdateMessage;
+import ndy.game.system.CameraSystem;
 import ndy.game.system.InputSystem;
 import ndy.game.system.PhysicsSystem;
 import ndy.game.system.RenderSystem;
@@ -43,6 +42,7 @@ public class Game {
 		state = new LoadingState();
 		_options = options;
 		systems.put(WorldSystem.name, new WorldSystem());
+		systems.put(CameraSystem.name, new CameraSystem());
 		systems.put(InputSystem.name, new InputSystem());
 		systems.put(PhysicsSystem.name, new PhysicsSystem());
 		systems.put(RenderSystem.name, new RenderSystem());
