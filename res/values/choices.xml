@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <array name="lakes">
+	        <item>@string/lake_mazury_name</item>
+	        <item>@drawable/mazury</item>
+	    	<item>mazury.xml</item>
+	    	
+	    	<item>@string/lake_leman_name</item>
+	    	<item>@drawable/leman</item>
+	    	<item>leman.xml</item>
+    </array>
+    
+    <array name="boats">
+        
+    </array>
+</resources>

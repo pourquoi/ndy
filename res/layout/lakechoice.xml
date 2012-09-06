@@ -11,4 +11,23 @@
         android:text="Ok" 
         android:onClick="select"/>
 
+    <TextView
+        android:id="@+id/lake_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <ImageView
+        android:id="@+id/lake_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+     />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="next" 
+        android:onClick="next"/>
+
 </LinearLayout>

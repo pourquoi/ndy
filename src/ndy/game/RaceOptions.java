@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 public class RaceOptions {
 	public String lake;
-	public String boat;
+	public String boat = "optimist.xml";
 	
 	public Bundle toBundle() {
 		Bundle bundle = new Bundle();

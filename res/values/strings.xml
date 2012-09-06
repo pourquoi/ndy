@@ -9,4 +9,8 @@
 	Masuria (Polish: Mazury) is a natural region in northeastern Poland famous for its 2,000 lakes. 
 	Geographically, Masuria is part of two adjacent lakeland districts, the Masurian Lake District (Polish: Pojezierze Mazurskie) and the Iława Lake District (Pojezierze Iławskie). 
 	</string>
+	<string name="lake_leman_name">Lac de Genève, Suisse/France</string>
+	<string name="lake_leman_desc">
+	Lake Geneva or Lake Léman (French: Lac Léman, Léman, German: Genfersee) is a lake in Switzerland and France. It is one of the largest lakes in Western Europe.
+	</string>
 </resources>
