@@ -12,6 +12,8 @@ import ndy.game.system.PhysicsSystem;
 import ndy.game.system.RenderSystem;
 import ndy.game.system.System;
 import ndy.game.system.WorldSystem;
+import ndy.state.GameState;
+import ndy.state.LoadingState;
 import android.content.Context;
 
 public class Game {
@@ -46,6 +48,10 @@ public class Game {
 		systems.put(InputSystem.name, new InputSystem());
 		systems.put(PhysicsSystem.name, new PhysicsSystem());
 		systems.put(RenderSystem.name, new RenderSystem());
+		
+		world = new GameWorld();
+		this.addActor(world);
+		world.load(options);
 	}
 
 	public void addActor(Actor a) {

@@ -1,5 +1,6 @@
-package ndy.game;
+package ndy.state;
 
+import ndy.game.Game;
 import ndy.game.message.Message;
 import ndy.game.message.UpdateMessage;
 import ndy.game.system.System;
