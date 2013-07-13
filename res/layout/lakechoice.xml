@@ -11,6 +11,13 @@
         android:text="Ok" 
         android:onClick="select"/>
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="next"
+        android:text="next" />
+
     <TextView
         android:id="@+id/lake_name"
         android:layout_width="wrap_content"
@@ -22,12 +29,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
      />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="next" 
-        android:onClick="next"/>
 
 </LinearLayout>

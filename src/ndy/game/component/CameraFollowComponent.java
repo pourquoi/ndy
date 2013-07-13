@@ -31,7 +31,7 @@ public class CameraFollowComponent extends CameraComponent {
 			_targetDir.y = MathUtils.sin(T.rot.y);
 
 			_wantedPos.x = T.pos.x;
-			_wantedPos.x = T.pos.z;
+			_wantedPos.y = T.pos.z;
 
 			_wantedPos.subLocal(_targetDir.mul(_distance));
 			

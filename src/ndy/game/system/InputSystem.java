@@ -16,7 +16,7 @@ public class InputSystem extends System {
 		if (m.getType() == Message.T_INPUT) {
 			for (Component c : components) {
 				InputMessage msg = (InputMessage) m;
-				if (c.parent == msg.actor)
+				if (msg.actor == null || c.parent == msg.actor)
 					c.processMessage(m);
 			}
 		}

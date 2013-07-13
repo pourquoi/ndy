@@ -79,11 +79,13 @@ public class NDYGLSurfaceView extends GLSurfaceView {
 					InputMessage msg = new InputMessage();
 					msg.action = InputMessage.RUDDER;
 					msg.dx = dx;
+					msg.dy = dy;
 					inputSystem.inputBuffer.add(msg);
 
 					msg = new InputMessage();
 					msg.action = InputMessage.CAMERA;
 					msg.dy = dy;
+					msg.dx = dx;
 					inputSystem.inputBuffer.add(msg);
 
 					break;

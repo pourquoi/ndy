@@ -48,10 +48,14 @@ public class Game {
 		systems.put(InputSystem.name, new InputSystem());
 		systems.put(PhysicsSystem.name, new PhysicsSystem());
 		systems.put(RenderSystem.name, new RenderSystem());
-		
+	}
+	
+	public void load()
+	{
 		world = new GameWorld();
+		world.init();
 		this.addActor(world);
-		world.load(options);
+		world.load(_options);
 	}
 
 	public void addActor(Actor a) {

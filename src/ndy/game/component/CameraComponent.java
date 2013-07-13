@@ -25,6 +25,10 @@ public class CameraComponent extends Component {
 		super("camera_"+name);
 		
 		systems.add(CameraSystem.name);
+		
+		pos.x = -10;
+		pos.y = 10;
+		pos.z = -10;
 	}
 
 	@Override

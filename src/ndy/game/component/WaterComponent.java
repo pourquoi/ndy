@@ -48,7 +48,7 @@ public class WaterComponent extends Component {
 	public void genMeshes() {
 		meshes = new Mesh[2];
 		meshes[0] = Mesh.plan(1, 1);
-		meshes[1] = Mesh.plan(1, 1);
+		meshes[1] = Mesh.plan(100, 100);
 	}
 
 	public void genWaterFeatures() {
