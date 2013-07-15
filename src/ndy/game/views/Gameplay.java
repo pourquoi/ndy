@@ -7,7 +7,10 @@ import ndy.state.RunningState;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class Gameplay extends Activity {
 	@Override
@@ -23,6 +26,8 @@ public class Gameplay extends Activity {
 		Game.instance.load();
 		Game.instance.state = new RunningState();
 		Game.instance.mContext = this;
+		
+		Button b = (Button)findViewById(R.id.button1);
 	}
 
 	public void onPause() {
@@ -35,5 +40,13 @@ public class Gameplay extends Activity {
 		super.onResume();
 		GLSurfaceView glview = (GLSurfaceView) findViewById(R.id.nDYGLSurfaceView1);
 		glview.onResume();
+	}
+	
+	public void genWeather(View view) {
+		Game.instance.world.water.genWaterFeatures();
+		
+		EditText et = (EditText)findViewById(R.id.editText1);
+		et.getText().clear();
+		et.getText().append(String.valueOf(Game.instance.world.water.wavelength));
 	}
 }

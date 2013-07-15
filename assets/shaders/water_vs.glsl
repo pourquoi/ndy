@@ -1,4 +1,4 @@
-#define NUM_WAVES 3
+#define NUM_WAVES 5
 
 precision mediump float;
 

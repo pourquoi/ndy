@@ -52,13 +52,15 @@ public class WaterComponent extends Component {
 	}
 
 	public void genWaterFeatures() {
-		numWaves = 3;
+		numWaves = 5;
 
 		water = new WaterOptions();
 
 		water.init(numWaves);
 
 		Random rnd = new Random();
+		
+		this.wavelength = rnd.nextFloat() * 5.f;
 
 		float wa = Game.instance.world.weather.mWindRot;
 
@@ -88,7 +90,11 @@ public class WaterComponent extends Component {
 
 	public boolean processMessage(Message msg) {
 		if (msg.getClass() == UpdateMessage.class) {
-			// TODO change water based on weather
+			TransformationComponent trans = (TransformationComponent) parent.findComponent("transformation");
+			
+			//trans.pos.z += 20 * ((UpdateMessage)msg).getInterval() / 1000.f;
+			
+		//	if( trans.pos.z < -trans.scale.z ) trans.pos.z = 0;
 		}
 
 		if (msg.getClass() == RenderMessage.class) {
@@ -99,11 +105,10 @@ public class WaterComponent extends Component {
 			p.sendGameParams();
 			p.sendActorMaterials(parent);
 
-			Actor r = parent;
-			TransformationComponent trans = (TransformationComponent) r.findComponent("transformation");
+			TransformationComponent trans = (TransformationComponent) parent.findComponent("transformation");
 
-			SubMesh submesh_low = meshes[1].submeshes.entrySet().iterator().next().getValue();
-			SubMesh submesh_high = meshes[0].submeshes.entrySet().iterator().next().getValue();
+			SubMesh submesh_low = meshes[0].submeshes.entrySet().iterator().next().getValue();
+			SubMesh submesh_high = meshes[1].submeshes.entrySet().iterator().next().getValue();
 
 			GLES20.glUniform1fv(p.mWaveAmplitudeHandle, numWaves, water.amplitude, 0);
 			GLES20.glUniform4fv(p.mWaveConstHandle, numWaves, water.wconst, 0);
@@ -111,10 +116,14 @@ public class WaterComponent extends Component {
 			GLES20.glUniform1fv(p.mWavePhaseHandle, numWaves, water.phases, 0);
 			GLES20.glUniform1fv(p.mWaveSharpnessHandle, numWaves, water.sharpness, 0);
 			GLES20.glUniform2fv(p.mWaveVectorHandle, numWaves, water.wavedir, 0);
+			
+			//for(int i=-1;i<=2;i++) {
+			int i=0;
 			GLES20.glUniform2f(p.mWaterSize, trans.scale.x, trans.scale.z);
-			GLES20.glUniform2f(p.mWaterPos, trans.pos.x, trans.pos.z);
-
-			renderPatch(p, submesh_high, trans.pos.x, trans.pos.z, trans.scale.x, trans.scale.z);
+			GLES20.glUniform2f(p.mWaterPos, trans.pos.x, trans.pos.z + i*trans.scale.z);
+			
+			renderPatch(p, submesh_high, trans.pos.x, trans.pos.z + i*trans.scale.z, trans.scale.x, trans.scale.z);
+			//}
 		}
 
 		return false;

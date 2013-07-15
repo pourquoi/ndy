@@ -27,7 +27,7 @@ public class WorldInputComponent extends Component {
 				Player p = ((GameWorld)parent).player;
 				TransformationComponent T = (TransformationComponent)p.findComponent("transformation");
 				
-				T.rot.y += m.dx / 100;
+				T.rot.y += m.dx / 30;
 			}
 		}
 		

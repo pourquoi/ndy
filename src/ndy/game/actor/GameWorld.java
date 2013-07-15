@@ -11,6 +11,7 @@ import ndy.game.component.WaterComponent;
 import ndy.game.component.WorldInputComponent;
 import ndy.game.material.Material;
 import ndy.game.material.Texture;
+import ndy.game.math.NDYMath;
 import ndy.game.shader.Program;
 
 public class GameWorld extends Actor {
@@ -53,8 +54,8 @@ public class GameWorld extends Actor {
 		Actor w = new Actor();
 		
 		TransformationComponent t = new TransformationComponent();
-		t.scale.x = 100;
-		t.scale.z = 100;
+		t.scale.x = 10;
+		t.scale.z = 10;
 		
 		t.pos.x = -t.scale.x / 2;
 		t.pos.z = -t.scale.z / 2;
@@ -74,14 +75,14 @@ public class GameWorld extends Actor {
 		w.addComponent(new MaterialComponent(envMat,1));
 		w.addComponent(new MaterialComponent(hmMat,2));
 		
-		water = new WaterComponent(Program.factory("shaders/water"), 0.1f);
+		water = new WaterComponent(Program.factory("shaders/water"), 5.1f);
 		w.addComponent(water);
 		
 		Game.instance.addActor(w);
 		
 		player = new Player();
 		t = new TransformationComponent();
-		t.rot.y = 0;
+		t.rot.y = NDYMath.HALF_PI;
 		t.pos.x = 0;
 		t.pos.z = 0;
 		player.addComponent(t);
