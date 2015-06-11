@@ -1,4 +1,1 @@
-ndy
-===
-
-Android game attempt
+android test game engine + demo Gerstner waves
