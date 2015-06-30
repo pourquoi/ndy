@@ -1,6 +1,9 @@
 package ndy.game.mesh;
 
+import android.util.Log;
+
 import org.jbox2d.collision.AABB;
+import org.jbox2d.common.Vec2;
 
 public class LoaderMesh extends Loader3DS {
 	protected Mesh mesh;
@@ -12,6 +15,7 @@ public class LoaderMesh extends Loader3DS {
 	protected void processObject() {
 		SubMesh submesh = new SubMesh();
 		submesh.name = _name;
+		submesh.cull = false;
 
 		submesh.aabb = new AABB(_min, _max);
 
@@ -42,5 +46,30 @@ public class LoaderMesh extends Loader3DS {
 
 		submesh.setVertices(svdata);
 		mesh.submeshes.put(_name, submesh);
+	}
+
+	protected void finalize() {
+		Vec2 min = null;
+		Vec2 max = null;
+		Log.i("ndy", "finalize " + mesh.submeshes.size());
+		for(SubMesh sm : mesh.submeshes.values()) {
+			if( sm.aabb == null ) continue;
+			if( min == null ) {
+				min = sm.aabb.lowerBound;
+				max = sm.aabb.upperBound;
+			}
+
+			else {
+				if( min.x > sm.aabb.lowerBound.x ) min.x = sm.aabb.lowerBound.x;
+				if( min.y > sm.aabb.lowerBound.y ) min.y = sm.aabb.lowerBound.y;
+				if( max.x < sm.aabb.upperBound.x ) max.x = sm.aabb.lowerBound.x;
+				if( max.y < sm.aabb.upperBound.y ) max.y = sm.aabb.upperBound.y;
+			}
+
+			Log.i("ndy", "min/max");
+		}
+
+		if( min != null )
+			mesh.aabb = new AABB(min, max);
 	}
 }

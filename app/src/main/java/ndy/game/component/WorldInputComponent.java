@@ -19,8 +19,8 @@ public class WorldInputComponent extends Component {
 				CameraComponent c = ((GameWorld)parent).camera;
 				if (c != null)
 					c.pos.y += m.dy;
-				if (c.pos.y < 5.f)
-					c.pos.y = 5.f;
+				if (c.pos.y < -30.f)
+					c.pos.y = -30.f;
 				if (c.pos.y > 30.f)
 					c.pos.y = 30.f;
 				

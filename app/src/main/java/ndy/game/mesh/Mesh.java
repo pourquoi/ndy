@@ -10,6 +10,7 @@ import ndy.game.component.MeshComponent;
 import ndy.game.shader.Program;
 import ndy.game.shader.ProgramBasic;
 
+import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -24,6 +25,8 @@ public class Mesh extends Ressource {
 	public static final int SHORT_SIZE_BYTES = 2;
 
 	public Hashtable<String, SubMesh> submeshes = new Hashtable<String, SubMesh>();
+
+	public AABB aabb;
 
 	public static Mesh factory(String name) {
 		Mesh m = (Mesh) Ressource.getRessource(name);
@@ -50,7 +53,7 @@ public class Mesh extends Ressource {
 		try {
 			loader.load(this.getName());
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
+			throw new RuntimeException(e);
 		}
 	}
 

@@ -153,8 +153,7 @@ class Loader3DS {
 				processObject();
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			System.exit(-1);
+			throw new RuntimeException(e);
 		}
 
 		try {
@@ -162,10 +161,16 @@ class Loader3DS {
 		} catch (Exception e) {
 
 		}
+
+		finalize();
 	}
 	
 	protected void processObject() {
 		
+	}
+
+	protected void finalize() {
+
 	}
 }
 
